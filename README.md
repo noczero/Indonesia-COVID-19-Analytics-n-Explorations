@@ -10,7 +10,7 @@ Indonesia-COVID-19-Analytics-n-Explorations
 Jakarta
 
 
-![Jakarta](notebooks/images/Kasus Aktif_Jakarta.png?raw=true "Title")
+![Jakarta](notebooks/images/Kasus%20Aktif_Jakarta.png?raw=true "Title")
 
 ### Project Structure
 
