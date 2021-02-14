@@ -8,6 +8,8 @@ Indonesia-COVID-19-Analytics-n-Explorations
 ### Visualization
 13 February
 Jakarta
+
+
 ![Jakarta Kasus Aktif](notebooks/images/Kasus Aktif_Jakarta.png)
 
 ### Project Structure
