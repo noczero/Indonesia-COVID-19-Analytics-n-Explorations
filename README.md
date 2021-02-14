@@ -8,8 +8,8 @@ Indonesia-COVID-19-Analytics-n-Explorations
 ### Project Structure
 
     .
-    ├── image                   # Images files that generated from notebooks
-    ├── notebooks               # Jupyter Notebooks file    
+    ├── notebooks               # Jupyter Notebooks file 
+       ├── image                # Images files that generated from notebooks   
     ├── src                     # Python file for backend and apps, including utlilites
     └── README.md
     
