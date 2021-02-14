@@ -1,7 +1,7 @@
 Indonesia-COVID-19-Analytics-n-Explorations
 ============================
 
-> Folder structure
+> This repository is for exploring covid-19 in Indonesia using data science approach. The data is from https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/edit#gid=2052139453 and managed by @kawalcovid19. 
 
 ### Project
 
