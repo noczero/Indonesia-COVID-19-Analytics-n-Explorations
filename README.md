@@ -34,7 +34,7 @@ Indonesia-COVID-19-Analytics-n-Explorations
 You can contribute to this repository, feel free to do pull request. I will review your PR.
 
 ### Visualization
-> Updated at 13 February
+> The images will be updated daily at 18:00 GMT +7
 - [Pulau Jawa](#Pulau-Jawa)
   * [Jakarta](#Jakarta)
   * [Banten](#Banten)
