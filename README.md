@@ -35,10 +35,10 @@ You can contribute to this repository, feel free to do pull request. I will revi
 
 ### Visualization
 > Updated at 13 February
-- [Pulau Jawa](#Pulau%20Jawa)
-  * [Jakarta](#Jakarta)
-  * [Banten](#Banten)
-  * [Jawa Barat](#Jawa%20Barat)
+- [Pulau Jawa](####Pulau#%20Jawa)
+  * [Jakarta](#####Jakarta)
+  * [Banten](#####Banten)
+  * [Jawa Barat](#####Jawa%20Barat)
    
 #### Pulau Jawa
 ##### Jakarta
