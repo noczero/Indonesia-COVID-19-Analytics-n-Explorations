@@ -35,6 +35,11 @@ You can contribute to this repository, feel free to do pull request. I will revi
 
 ### Visualization
 > Updated at 13 February
+- [Pulau Jawa](#Pulau Jawa)
+  * [Jakarta](#Jakarta)
+  * [Banten](#Banten)
+  * [Jawa Barat](#Jawa Barat)
+   
 #### Pulau Jawa
 ##### Jakarta
 ![jkt active case](notebooks/images/Kasus%20Aktif_Jakarta.png?raw=true "Active Case")
