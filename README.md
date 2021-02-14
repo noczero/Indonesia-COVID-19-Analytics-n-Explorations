@@ -17,7 +17,7 @@ Indonesia-COVID-19-Analytics-n-Explorations
 ### To Do
 - [ ] Provide public API.   
   - [ ] Use fastAPI directly.
-  - [ ] Use InfluxDB to store timeseries and forward to Laravel with OAuth.
+  - [ ] Use InfluxDB to store timeseries data, for backend using Laravel OAuth with token.
 - [ ] Make more visualization plot in notebooks.
 - [ ] Build front-end app using Dash.
 - [ ] Build k-Means model for clustering zone.
@@ -28,6 +28,7 @@ Indonesia-COVID-19-Analytics-n-Explorations
 - [x] Preprocessing
 - [x] Plot All Province for 7 cases
 - [x] Prepare for backend
+- [x] Run automation for updating plot every 18:00 GMT+7
 
 
 ### Pull Request
