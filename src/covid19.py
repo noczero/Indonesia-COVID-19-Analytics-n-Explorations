@@ -1,4 +1,4 @@
-from utils import preprocessing, load_data
+from utils import preprocessing, load_data, save_plot
 import pandas as pd
 
 
@@ -33,6 +33,9 @@ class Covid19:
     def get_new_dead_case(self) -> pd.DataFrame:
         return self.clean_data['Meninggal Dunia Harian']
 
+    def generate_plot(self):
+        save_plot(self.clean_data)
+
 
 if __name__ == '__main__':
     # testing
@@ -47,3 +50,6 @@ if __name__ == '__main__':
 
     print("\nStill Active")
     print(indo_covid19.get_still_active_case())
+    indo_covid19.generate_plot()
+
+
