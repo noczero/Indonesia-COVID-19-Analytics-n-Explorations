@@ -5,12 +5,6 @@ Indonesia-COVID-19-Analytics-n-Explorations
 
 > The data is from https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/edit#gid=2052139453 and managed by @kawalcovid19
 
-### Visualization
-13 February
-Jakarta
-
-
-![Jakarta](notebooks/images/Kasus%20Aktif_Jakarta.png?raw=true "Title")
 
 ### Project Structure
 
@@ -38,3 +32,8 @@ Jakarta
 
 ### Pull Request
 You can contribute to this repository, feel free to do pull request. I will review your PR.
+
+### Visualization
+#### Updated at 13 February
+##### Jakarta
+![jkt](notebooks/images/Kasus%20Aktif_Jakarta.png?raw=true "Title")
