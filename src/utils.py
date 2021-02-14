@@ -1,5 +1,8 @@
 import pandas as pd
 from datetime import datetime
+from matplotlib import pyplot as plt
+import matplotlib.style as style
+import seaborn as sns
 
 
 def load_data(url: str) -> pd.DataFrame:
@@ -101,3 +104,33 @@ def parse_time(df_category: pd.DataFrame) -> list:
 
         # print(time_dt)
     return time_list
+
+
+# plot
+def save_plot(df_categories: dict):
+    style.use('seaborn-poster')  # sets the size of the charts
+    style.use('seaborn-whitegrid')
+    sns.set_context('poster')
+
+    for category, df_category in df_categories.items():
+        print("Generating {} plot...".format(category))
+        for province in df_category.columns:
+            fig, ax = plt.subplots()
+
+            if 'Harian' in category:
+                # ax.bar(df_category.index,df_category[province], label=category)
+                # sns.barplot( x = df_category.index, y= province, data = df_category)
+                ax.bar(df_category.index, df_category[province], color='tab:red', label=category)
+            else:
+                ax.plot(df_category.index, df_category[province], color='tab:red', label=category)
+
+            ax.set_title('Kasus Covid-19 di {}'.format(province))
+            ax.set_xlabel('Waktu')
+            ax.set_ylabel('Orang')
+            ax.legend(loc='upper right')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig('../notebooks/images/{}_{}.png'.format(category, province), dpi=300)
+            plt.close()
+
+        print("Generating {} plot successfully.".format(category))
