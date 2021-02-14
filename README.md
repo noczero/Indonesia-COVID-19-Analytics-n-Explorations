@@ -44,5 +44,14 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ![jkt cured case](notebooks/images/Sembuh_Jakarta.png?raw=true "Cured Case")
 ![jkt total case](notebooks/images/Total%20Case_Jakarta.png?raw=true "Total Confirmed Case")
 
+##### Jawa Barat
+![jabar active case](notebooks/images/Kasus%20Aktif_Jabar.png?raw=true "Active Case")
+![jabar new case](notebooks/images/Kasus%20Harian_Jabar.png?raw=true "New Case")
+![jabar dead case](notebooks/images/Meninggal%20Dunia_Jabar.png?raw=true "Dead Case")
+![jabar new dead case](notebooks/images/Meninggal%20Dunia%20Harian_Jabar.png?raw=true "New Dead Case")
+![jabar new cure case](notebooks/images/Sembuh%20Harian_Jabar.png?raw=true "New Cure Case")
+![jabar cured case](notebooks/images/Sembuh_Jabar.png?raw=true "Cured Case")
+![jabar total case](notebooks/images/Total%20Case_Jabar.png?raw=true "Total Confirmed Case")
+
 
 
