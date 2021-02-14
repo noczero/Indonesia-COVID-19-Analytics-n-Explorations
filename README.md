@@ -35,10 +35,47 @@ You can contribute to this repository, feel free to do pull request. I will revi
 
 ### Visualization
 > Updated at 13 February
-- [Pulau Jawa](####Pulau#%20Jawa)
-  * [Jakarta](#####Jakarta)
-  * [Banten](#####Banten)
-  * [Jawa Barat](#####Jawa%20Barat)
+- [Pulau Jawa](#Pulau-Jawa)
+  * [Jakarta](#Jakarta)
+  * [Banten](#Banten)
+  * [Jawa Barat](#Jawa-Barat)
+  * [Jawa Tengah](#Jawa-Tengah)
+  * [Daerah Istimewa Yogyakarta](#Daerah-Istimewa-Yogyakarta)
+  * [Jawa Timur](#Jawa-Timur)
+  * [Jawa Timur](#Jawa-Timur)
+
+- [Pulau Sumatera](#Pulau-Sumatera)
+  * [Aceh](#Aceh)
+  * [Sumatera Utara](#Sumatera-Utara)
+  * [Riau](#Riau)
+  * [Sumatera Barat](#Sumatera-Barat)
+  * [Kepulauan Riau](#Kepulauan-Riau)
+  * [Jambi](#Jambi)
+  * [Sumatera Selatan](#Sumatera-Selatan)
+  * [Bangka Belitung](#Bangka-Belitung)
+  * [Bengkulu](#Bengkulu)
+  * [Lampung](#Lampung)
+  
+- [Pulau Kalimantan](#Kalimantan)
+  * [Kalimantan Barat](#Kalimantan-Barat)
+  * [Kalimantan Tengah](#Kalimantan-Tengah)
+  * [Kalimantan Utara](#Kalimantan-Utara)
+  * [Kalimantan Timur](#Kalimantan-Timur)
+  * [Kalimantan Selatan](#Kalimantan-Selatan)
+- [Pulau Sulawesi](#Sulawesi)
+  * [Sulawesi Selatan](#Sulawesi-Selatan)
+  * [Sulawesi Barat](#Sulawesi-Barat)
+  * [Sulawesi Tengah](#Sulawesi-Tengah)
+  * [Gorontalo](#Gorontalo)
+  * [Sulawesi Utara](#Sulawesi-Utara)
+  * [Sulawesi Tenggara](#Sulawesi-Tenggara)
+- [Bali](#Bali)
+- [Nusa Tenggara Barat](#Nusa-Tenggara-Barat)
+- [Nusa Tenggara Timur](#Nusa-Tenggara-Timur)
+- [Maluku](#Maluku)
+- [Maluku Utara](#Maluku-Utara)
+- [Papua](#Papua)
+- [Papua Barat](#Papua-Barat)
    
 #### Pulau Jawa
 ##### Jakarta
@@ -137,13 +174,14 @@ You can contribute to this repository, feel free to do pull request. I will revi
 
 
 ##### Kepulauan Riau
-![Kep Riau active case](notebooks/images/Kasus%20Aktif_Kep Riau.png?raw=true "Active Case")
-![Kep Riau new case](notebooks/images/Kasus%20Harian_Kep Riau.png?raw=true "New Case")
-![Kep Riau dead case](notebooks/images/Meninggal%20Dunia_Kep Riau.png?raw=true "Dead Case")
-![Kep Riau new dead case](notebooks/images/Meninggal%20Dunia%20Harian_Kep Riau.png?raw=true "New Dead Case")
-![Kep Riau new cure case](notebooks/images/Sembuh%20Harian_Kep Riau.png?raw=true "New Cure Case")
-![Kep Riau cured case](notebooks/images/Sembuh_Kep Riau.png?raw=true "Cured Case")
-![Kep Riau total case](notebooks/images/Total%20Case_Kep Riau.png?raw=true "Total Confirmed Case")
+![Kep Riau active case](notebooks/images/Kasus%20Aktif_Kep%20Riau.png?raw=true "Active Case")
+![Kep Riau new case](notebooks/images/Kasus%20Harian_Kep%20Riau.png?raw=true "New Case")
+![Kep Riau dead case](notebooks/images/Meninggal%20Dunia_Kep%20Riau.png?raw=true "Dead Case")
+![Kep Riau new dead case](notebooks/images/Meninggal%20Dunia%20Harian_Kep%20Riau.png?raw=true "New Dead Case")
+![Kep Riau new cure case](notebooks/images/Sembuh%20Harian_Kep%20Riau.png?raw=true "New Cure Case")
+![Kep Riau cured case](notebooks/images/Sembuh_Kep%20Riau.png?raw=true "Cured Case")
+![Kep Riau total case](notebooks/images/Total%20Case_Kep%20Riau.png?raw=true "Total Confirmed Case")
+![Kep Riau total case](notebooks/images/Total%20Case_Kep%20Riau.png?raw=true "Total Confirmed Case")
 
 ##### Jambi
 ![Jambi active case](notebooks/images/Kasus%20Aktif_Jambi.png?raw=true "Active Case")
@@ -323,6 +361,14 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ![NTT new cure case](notebooks/images/Sembuh%20Harian_NTT.png?raw=true "New Cure Case")
 ![NTT cured case](notebooks/images/Sembuh_NTT.png?raw=true "Cured Case")
 ![NTT total case](notebooks/images/Total%20Case_NTT.png?raw=true "Total Confirmed Case")
+#### Maluku 
+![Maluku active case](notebooks/images/Kasus%20Aktif_Maluku.png?raw=true "Active Case")
+![Maluku new case](notebooks/images/Kasus%20Harian_Maluku.png?raw=true "New Case")
+![Maluku dead case](notebooks/images/Meninggal%20Dunia_Maluku.png?raw=true "Dead Case")
+![Maluku new dead case](notebooks/images/Meninggal%20Dunia%20Harian_Maluku.png?raw=true "New Dead Case")
+![Maluku new cure case](notebooks/images/Sembuh%20Harian_Maluku.png?raw=true "New Cure Case")
+![Maluku cured case](notebooks/images/Sembuh_Maluku.png?raw=true "Cured Case")
+![Maluku total case](notebooks/images/Total%20Case_Maluku.png?raw=true "Total Confirmed Case")
 
 
 #### Maluku Utara
