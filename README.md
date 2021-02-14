@@ -36,4 +36,13 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ### Visualization
 #### Updated at 13 February
 ##### Jakarta
-![jkt](notebooks/images/Kasus%20Aktif_Jakarta.png?raw=true "Title")
+![jkt active case](notebooks/images/Kasus%20Aktif_Jakarta.png?raw=true "Active Case")
+![jkt new case](notebooks/images/Kasus%20Harian_Jakarta.png?raw=true "New Case")
+![jkt dead case](notebooks/images/Meninggal%20Dunia_Jakarta.png?raw=true "Dead Case")
+![jkt new dead case](notebooks/images/Meninggal%20Dunia%20Harian_Jakarta.png?raw=true "New Dead Case")
+![jkt new cure case](notebooks/images/Sembuh%20Harian_Jakarta.png?raw=true "New Cure Case")
+![jkt cured case](notebooks/images/Sembuh_Jakarta.png?raw=true "Cured Case")
+![jkt total case](notebooks/images/Total%20Case_Jakarta.png?raw=true "Total Confirmed Case")
+
+
+
