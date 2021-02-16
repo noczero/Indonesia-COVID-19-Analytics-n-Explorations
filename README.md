@@ -28,14 +28,14 @@ Indonesia-COVID-19-Analytics-n-Explorations
 - [x] Preprocessing
 - [x] Plot All Province for 7 cases
 - [x] Prepare for backend
-- [x] Run automation for updating plot every 19:00 GMT+7
+- [x] Run automation for updating plot every 19:30 GMT+7
 
 
 ### Pull Request
 You can contribute to this repository, feel free to do pull request. I will review your PR.
 
 ### Visualization
-> The images will be updated daily at 19:00 GMT +7
+> The images will be updated daily at 19:30 GMT +7
 - [Pulau Jawa](#Pulau-Jawa)
   * [Jakarta](#Jakarta)
   * [Banten](#Banten)
