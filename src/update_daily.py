@@ -41,7 +41,7 @@ if __name__ == '__main__':
     sheet_gid = '2052139453'  # get from browser url when sheet clicked
     data_url = 'https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/export?format={}&gid={}'.format(
         format, sheet_gid)
-    update_time = "19:00"
+    update_time = "19:30"
     schedule.every().day.at(update_time).do(run_automation)
 
     #run_automation()
