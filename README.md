@@ -36,6 +36,8 @@ You can contribute to this repository, feel free to do pull request. I will revi
 
 ### Visualization
 > The images will be updated daily at 19:30 GMT +7
+
+#### Provinces Timeline Data
 - [Pulau Jawa](#Pulau-Jawa)
   * [Jakarta](#Jakarta)
   * [Banten](#Banten)
@@ -74,6 +76,16 @@ You can contribute to this repository, feel free to do pull request. I will revi
 - [Maluku Utara](#Maluku-Utara)
 - [Papua](#Papua)
 - [Papua Barat](#Papua-Barat)
+
+#### Cases on All Provinces
+- [Still Active Cases](#Active-Case-on-All-Province)    
+- [New Active Cases](#New-Active-Case-on-All-Province)    
+- [New Cured Cases](#New-Cured-Cases-on-All-Province)        
+- [New Dead Cases](#New-Dead-Cases-on-All-Province)    
+- [Total Confirmed Cases](#Total-Confirmed-Cases-on-All-Province)    
+- [Total Cured Cases](#Total-Cured-Cases-on-All-Province)    
+- [Total Dead Cases](#Total-Dead-Cases-on-All-Province)    
+
    
 #### Pulau Jawa
 ##### Jakarta
@@ -396,6 +408,24 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ![Papbar cured case](notebooks/images/Sembuh_Papbar.png?raw=true "Cured Case")
 ![Papbar total case](notebooks/images/Total%20Case_Papbar.png?raw=true "Total Confirmed Case")
 
+### Still Active Cases
+![Still Active Cases](notebooks/images/Kasus%20Aktif_Semua_Provinsi.png?raw=true "Still Active Cases on All Provinces")
 
+### New Active Cases
+![New Cases](notebooks/images/Kasus%20Harian_Semua_Provinsi.png?raw=true "New Active Cases on All Provinces")
 
+### New Cured Cases
+![New Cured Cases](notebooks/images/Sembuh%20Harian_Semua_Provinsi.png?raw=true "New Cured Cases on All Provinces")
+
+### New Dead Cases
+![New Dead Cases](notebooks/images/Meninggal%20Dunia%20Harian_Semua_Provinsi.png?raw=true "New Dead Active Cases on All Provinces")
+
+### Total Confirmed Cases
+![Total Confirmed Cases](notebooks/images/Total%20Case_Semua_Provinsi.png?raw=true "Total Confirmed Cases on All Provinces")
+
+### Total Cured Cases
+![Total Cured Cases](notebooks/images/Sembuh_Semua_Provinsi.png?raw=true "Total Cured Cases on All Provinces")
+
+### Total Dead Cases
+![Total Dead Cases](notebooks/images/Meninggal%20Dunia_Semua_Provinsi.png?raw=true "Total Dead Cases on All Provinces")
 
