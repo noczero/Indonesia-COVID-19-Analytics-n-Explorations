@@ -78,13 +78,13 @@ You can contribute to this repository, feel free to do pull request. I will revi
 - [Papua Barat](#Papua-Barat)
 
 #### Cases on All Provinces
-- [Still Active Cases](#Active-Case-on-All-Province)    
-- [New Active Cases](#New-Active-Case-on-All-Province)    
-- [New Cured Cases](#New-Cured-Cases-on-All-Province)        
-- [New Dead Cases](#New-Dead-Cases-on-All-Province)    
-- [Total Confirmed Cases](#Total-Confirmed-Cases-on-All-Province)    
-- [Total Cured Cases](#Total-Cured-Cases-on-All-Province)    
-- [Total Dead Cases](#Total-Dead-Cases-on-All-Province)    
+- [Still Active Cases](#Still-Active-Cases)    
+- [New Active Cases](#New-Active-Cases)    
+- [New Cured Cases](#New-Cured-Cases)        
+- [New Dead Cases](#New-Dead-Cases)    
+- [Total Confirmed Cases](#Total-Confirmed-Cases)    
+- [Total Cured Cases](#Total-Cured-Cases)    
+- [Total Dead Cases](#Total-Dead-Cases)    
 
    
 #### Pulau Jawa
