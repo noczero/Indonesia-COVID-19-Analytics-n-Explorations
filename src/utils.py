@@ -4,6 +4,14 @@ from matplotlib import pyplot as plt
 import matplotlib.style as style
 import seaborn as sns
 
+from matplotlib.dates import DateFormatter
+# Handle date time conversions between pandas and matplotlib
+from pandas.plotting import register_matplotlib_converters
+
+register_matplotlib_converters()
+
+date_form = DateFormatter("%d-%b-%y")
+
 
 def load_data(url: str) -> pd.DataFrame:
     return pd.read_csv(url)
@@ -128,9 +136,93 @@ def save_plot(df_categories: dict):
             ax.set_xlabel('Waktu')
             ax.set_ylabel('Orang')
             ax.legend(loc='upper right')
+
+            # change date fromat
+            ax.xaxis.set_major_formatter(date_form)
+
             plt.xticks(rotation=45)
             plt.tight_layout()
             plt.savefig('../notebooks/images/{}_{}.png'.format(category, province), dpi=300)
             plt.close()
 
         print("Generating {} plot successfully.".format(category))
+
+
+def save_plot_all_province(df_categories: dict):
+    style.use('seaborn-poster')  # sets the size of the charts
+    style.use('seaborn-whitegrid')
+    sns.set_context('poster')
+
+    LINE_STYLES = ['solid', 'dashed', 'dashdot', 'dotted']
+    NUM_STYLES = len(LINE_STYLES)
+    NUM_COLORS = 34
+
+    cm = plt.get_cmap('gist_rainbow')
+    clrs = sns.color_palette('husl', n_colors=NUM_COLORS)  # a list of RGB tuples
+
+    for category, df_category in df_categories.items():
+        if 'Harian' not in category:
+            fig = plt.figure(figsize=(12, 10))
+            ax = plt.subplot(111)
+            i = 0
+            for province in df_category.columns:
+                lines = ax.plot(df_category.index, df_category[province], label=province)
+                lines[0].set_color(clrs[i])
+                lines[0].set_linestyle(LINE_STYLES[i % NUM_STYLES])
+                i += 1
+
+            plt.title('{} di Semua Provinsi'.format(category))
+            skip = max(len(df_category.index) // 10, 1)  # 10 date tick marks
+            plt.xticks(df_category.index[::skip])
+            plt.xlabel("Waktu")
+            plt.ylabel("Orang")
+            plt.xticks(rotation=45)
+
+            # Shrink current axis's height by 10% on the bottom
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0 + box.height * 0.5,
+                             box.width, box.height * 1])
+
+            # Put a legend below current axis
+            ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.35),
+                      fancybox=True, shadow=True, ncol=5)
+
+            # date formatter
+            ax.xaxis.set_major_formatter(date_form)
+
+            plt.subplots_adjust()
+            plt.savefig('../notebooks/images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+
+        else:
+            # bar
+            fig = plt.figure(figsize=(12, 10))
+            ax = plt.subplot(111)
+            i = 0
+            for province in df_category.columns:
+                lines = ax.bar(df_category.index, df_category[province], label=province)
+                lines[0].set_color(clrs[i])
+                lines[0].set_linestyle(LINE_STYLES[i % NUM_STYLES])
+                i += 1
+
+            plt.title('{} di Semua Provinsi'.format(category))
+            skip = max(len(df_category.index) // 10, 1)  # 10 date tick marks
+            plt.xticks(df_category.index[::skip])
+            plt.xlabel("Waktu")
+            plt.ylabel("Orang")
+            plt.xticks(rotation=45)
+
+            # Shrink current axis's height by 10% on the bottom
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0 + box.height * 0.5,
+                             box.width, box.height * 1])
+
+            # Put a legend below current axis
+            ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.35),
+                      fancybox=True, shadow=True, ncol=5)
+
+            # date formatter
+            ax.xaxis.set_major_formatter(date_form)
+
+            plt.subplots_adjust()
+            plt.savefig('../notebooks/images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+
