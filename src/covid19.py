@@ -1,4 +1,4 @@
-from utils import preprocessing, load_data, save_plot
+from utils import preprocessing, load_data, save_plot, save_plot_all_province
 import pandas as pd
 
 
@@ -36,6 +36,9 @@ class Covid19:
     def generate_plot(self):
         save_plot(self.clean_data)
 
+    def generate_aggregation_plot(self):
+        save_plot_all_province(self.clean_data)
+
 
 if __name__ == '__main__':
     # testing
@@ -50,6 +53,7 @@ if __name__ == '__main__':
 
     print("\nStill Active")
     print(indo_covid19.get_still_active_case())
-    indo_covid19.generate_plot()
+    #indo_covid19.generate_plot()
+    indo_covid19.generate_aggregation_plot()
 
 
