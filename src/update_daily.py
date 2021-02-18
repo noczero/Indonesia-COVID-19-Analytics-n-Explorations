@@ -12,6 +12,7 @@ def run_automation():
     # process plot
     indo_covid19 = Covid19(data_url)
     indo_covid19.generate_plot()
+    indo_covid19.generate_aggregation_plot()
 
     # push new files
     do_git_push_cmd()
