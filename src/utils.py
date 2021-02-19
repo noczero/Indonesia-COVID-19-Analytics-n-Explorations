@@ -129,8 +129,12 @@ def save_plot(df_categories: dict):
                 # ax.bar(df_category.index,df_category[province], label=category)
                 # sns.barplot( x = df_category.index, y= province, data = df_category)
                 ax.bar(df_category.index, df_category[province], color='tab:red', label=category)
+
             else:
                 ax.plot(df_category.index, df_category[province], color='tab:red', label=category)
+
+            skip = max(len(df_category.index) // 10, 1)  # 10 date tick marks
+            plt.xticks(df_category.index[::skip])
 
             ax.set_title('Kasus Covid-19 di {}'.format(province))
             ax.set_xlabel('Waktu')
