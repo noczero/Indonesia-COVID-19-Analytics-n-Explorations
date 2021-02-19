@@ -45,7 +45,7 @@ if __name__ == '__main__':
     update_time = "19:30"
     schedule.every().day.at(update_time).do(run_automation)
 
-    #run_automation()
+    run_automation()
 
     while True:
         schedule.run_pending()
