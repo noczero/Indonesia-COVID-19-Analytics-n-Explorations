@@ -429,3 +429,7 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ### Total Dead Cases
 ![Total Dead Cases](notebooks/images/Meninggal%20Dunia_Semua_Provinsi.png?raw=true "Total Dead Cases on All Provinces")
 
+## Provinces API 
+| Province      | API      |
+| :---        |    :----             |
+| Aceh      | https://apicovid.bravo.siat.web.id/api/v_update_covid19 |
