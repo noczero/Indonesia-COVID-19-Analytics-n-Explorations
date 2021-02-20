@@ -1,4 +1,4 @@
-from utils import preprocessing, load_data, save_plot, save_plot_all_province, save_plot_monthly, save_plot_weekly, save_cases_to_csv
+from utils import preprocessing, load_data, save_plot, save_plot_all_province, save_plot_monthly, save_plot_weekday, save_cases_to_csv
 import pandas as pd
 
 
@@ -43,7 +43,7 @@ class Covid19:
         save_plot_monthly(self.clean_data)
 
     def generate_weekday_plot(self):
-        save_plot_weekly(self.clean_data)
+        save_plot_weekday(self.clean_data)
 
     def generate_csv(self):
         save_cases_to_csv(self.clean_data)
