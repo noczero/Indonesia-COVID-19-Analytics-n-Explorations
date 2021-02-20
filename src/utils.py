@@ -146,7 +146,7 @@ def save_plot(df_categories: dict):
 
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig('../notebooks/images/{}_{}.png'.format(category, province), dpi=300)
+            plt.savefig('../images/{}_{}.png'.format(category, province), dpi=300)
             plt.close()
 
         print("Generating {} plot successfully.".format(category))
@@ -165,6 +165,7 @@ def save_plot_all_province(df_categories: dict):
     clrs = sns.color_palette('husl', n_colors=NUM_COLORS)  # a list of RGB tuples
 
     for category, df_category in df_categories.items():
+        print("Generating join {} plot...".format(category))
         if 'Harian' not in category:
             fig = plt.figure(figsize=(12, 10))
             ax = plt.subplot(111)
@@ -195,7 +196,7 @@ def save_plot_all_province(df_categories: dict):
             ax.xaxis.set_major_formatter(date_form)
 
             plt.subplots_adjust()
-            plt.savefig('../notebooks/images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+            plt.savefig('../images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
 
         else:
             # bar
@@ -228,5 +229,56 @@ def save_plot_all_province(df_categories: dict):
             ax.xaxis.set_major_formatter(date_form)
 
             plt.subplots_adjust()
-            plt.savefig('../notebooks/images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+            plt.savefig('../images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
 
+        print("Generating join {} plot successfully.".format(category))
+
+
+def save_plot_monthly(df_categories: dict):
+    for category, df_category in df_categories.items():
+        if 'Harian' in category:  # Filter just harian
+            df_monthly_avg = df_category.resample('M').mean()  # get average
+
+            for province in df_category.columns:
+                fig, ax = plt.subplots()
+                df_monthly_avg[province].plot(kind='bar', title='Rata-Rata {} di {}'.format(category, province), ax=ax,
+                                              color='tab:red').set(xlabel='Waktu', ylabel='Orang')
+                ax.set_xticklabels(map(line_format, df_monthly_avg[province].index))
+                plt.tight_layout()
+                ax.figure.savefig('../images/{} Rata-Rata di {}'.format(category, province), dpi=100)
+
+
+def save_plot_weekday(df_categories: dict):
+    days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
+    for category, df_category in df_categories.items():
+        if 'Harian' in category:  # Filter just harian
+            df_weekly_avg = df_category.copy()
+            df_weekly_avg['Day'] = df_category.index.weekday  # get weekday, 0 : monday, 1 : tuesday , .... , 6 : Sunday
+            df_weekly_avg = df_weekly_avg.groupby('Day').mean()
+
+            for province in df_category.columns:
+                fig, ax = plt.subplots()
+                df_weekly_avg[province].plot(kind='bar',
+                                             title='Rata-Rata {} dalam Hari di {}'.format(category, province), ax=ax,
+                                             color='tab:red').set(xlabel='Waktu', ylabel='Orang')
+                ax.set_xticklabels(days)
+                plt.tight_layout()
+                ax.figure.savefig('../images/{} Rata-Rata dalam Hari di {}'.format(category, province), dpi=100)
+                # plt.show()
+
+
+def save_cases_to_csv(df_categories: dict):
+    for category, df_category in df_categories.items():
+        dt_now = datetime.now()
+        filename = "../data/{}_{}_{}_{}_post_processing.csv".format(category, dt_now.day, dt_now.month, dt_now.year)
+        df_category.to_csv(filename)
+
+
+def line_format(label):
+    """
+    Convert time label to the format of pandas line plot
+    """
+    month = label.month_name()[:3]
+    if month == 'Jan':
+        month += f'\n{label.year}'
+    return month
