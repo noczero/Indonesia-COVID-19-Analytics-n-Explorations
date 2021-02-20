@@ -9,10 +9,15 @@ def run_automation():
     # invoke pull for recent files on master
     do_git_pull_cmd()
 
-    # process plot
+    # generate plot
     indo_covid19 = Covid19(data_url)
     indo_covid19.generate_plot()
     indo_covid19.generate_aggregation_plot()
+    indo_covid19.generate_monthly_plot()
+    indo_covid19.generate_weekday_plot()
+
+    # generate csv
+    indo_covid19.generate_csv()
 
     # push new files
     do_git_push_cmd()
@@ -26,18 +31,19 @@ def do_git_pull_cmd():
 def do_git_push_cmd():
     try:
         print("Add images")
-        cmd.run("git add ../notebooks/images", check=True, shell=True)
+        cmd.run("git add ../images", check=True, shell=True)
         dt_now = datetime.now()
         msg = "Update-on-{}/{}/{}".format(dt_now.day, dt_now.month, dt_now.year)
         cmd.run("git commit -m {}".format(msg), check=True, shell=True)
         cmd.run("git push origin master", check=True, shell=True)
         print("Push successfully... ")
     except:
+        cmd.run("git push origin master", check=True, shell=True)
         print("Something wrong...")
 
 
 if __name__ == '__main__':
-    print("Start Schedule")
+    print("Start Scheduling...")
     format = 'csv'  # export format
     sheet_gid = '2052139453'  # get from browser url when sheet clicked
     data_url = 'https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/export?format={}&gid={}'.format(
