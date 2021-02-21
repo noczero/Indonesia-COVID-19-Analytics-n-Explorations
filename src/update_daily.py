@@ -30,11 +30,14 @@ def do_git_pull_cmd():
 
 def do_git_push_cmd():
     try:
-        print("Add images")
+        print("Add generated files to staging area.")
         cmd.run("git add ../images", check=True, shell=True)
         dt_now = datetime.now()
+
+        print("Commit...")
         msg = "Update-on-{}/{}/{}".format(dt_now.day, dt_now.month, dt_now.year)
         cmd.run("git commit -m {}".format(msg), check=True, shell=True)
+
         cmd.run("git push origin master", check=True, shell=True)
         print("Push successfully... ")
     except:
