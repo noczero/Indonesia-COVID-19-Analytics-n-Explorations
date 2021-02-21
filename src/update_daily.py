@@ -32,9 +32,10 @@ def do_git_push_cmd():
     try:
         print("Add generated files to staging area.")
         cmd.run("git add ../images", check=True, shell=True)
-        dt_now = datetime.now()
+        cmd.run("git add ../data", check=True, shell=True)
 
         print("Commit...")
+        dt_now = datetime.now()
         msg = "Update-on-{}/{}/{}".format(dt_now.day, dt_now.month, dt_now.year)
         cmd.run("git commit -m {}".format(msg), check=True, shell=True)
 
