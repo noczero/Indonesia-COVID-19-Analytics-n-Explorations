@@ -12,6 +12,10 @@ register_matplotlib_converters()
 
 date_form = DateFormatter("%d-%b-%y")
 
+style.use('seaborn-poster')  # sets the size of the charts
+style.use('seaborn-whitegrid')
+sns.set_context('poster')
+
 
 def load_data(url: str) -> pd.DataFrame:
     return pd.read_csv(url)
@@ -116,10 +120,6 @@ def parse_time(df_category: pd.DataFrame) -> list:
 
 # plot
 def save_plot(df_categories: dict):
-    style.use('seaborn-poster')  # sets the size of the charts
-    style.use('seaborn-whitegrid')
-    sns.set_context('poster')
-
     for category, df_category in df_categories.items():
         print("Generating {} plot...".format(category))
         for province in df_category.columns:
@@ -153,10 +153,6 @@ def save_plot(df_categories: dict):
 
 
 def save_plot_all_province(df_categories: dict):
-    style.use('seaborn-poster')  # sets the size of the charts
-    style.use('seaborn-whitegrid')
-    sns.set_context('poster')
-
     LINE_STYLES = ['solid', 'dashed', 'dashdot', 'dotted']
     NUM_STYLES = len(LINE_STYLES)
     NUM_COLORS = 34
@@ -197,7 +193,7 @@ def save_plot_all_province(df_categories: dict):
 
             plt.subplots_adjust()
             plt.savefig('../images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
-
+            plt.close()
         else:
             # bar
             fig = plt.figure(figsize=(12, 10))
@@ -230,6 +226,7 @@ def save_plot_all_province(df_categories: dict):
 
             plt.subplots_adjust()
             plt.savefig('../images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+            plt.close()
 
         print("Generating join {} plot successfully.".format(category))
 
@@ -237,6 +234,7 @@ def save_plot_all_province(df_categories: dict):
 def save_plot_monthly(df_categories: dict):
     for category, df_category in df_categories.items():
         if 'Harian' in category:  # Filter just harian
+            print("Generating {} plot in month...".format(category))
             df_monthly_avg = df_category.resample('M').mean()  # get average
 
             for province in df_category.columns:
@@ -246,12 +244,16 @@ def save_plot_monthly(df_categories: dict):
                 ax.set_xticklabels(map(line_format, df_monthly_avg[province].index))
                 plt.tight_layout()
                 ax.figure.savefig('../images/{} Rata-Rata di {}'.format(category, province), dpi=100)
+                plt.close()
+
+            print("Generating {} plot in month successfully.".format(category))
 
 
 def save_plot_weekday(df_categories: dict):
     days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
     for category, df_category in df_categories.items():
         if 'Harian' in category:  # Filter just harian
+            print("Generating {} plot in weekday...".format(category))
             df_weekly_avg = df_category.copy()
             df_weekly_avg['Day'] = df_category.index.weekday  # get weekday, 0 : monday, 1 : tuesday , .... , 6 : Sunday
             df_weekly_avg = df_weekly_avg.groupby('Day').mean()
@@ -264,14 +266,16 @@ def save_plot_weekday(df_categories: dict):
                 ax.set_xticklabels(days)
                 plt.tight_layout()
                 ax.figure.savefig('../images/{} Rata-Rata dalam Hari di {}'.format(category, province), dpi=100)
-                # plt.show()
+                plt.close()
+
+            print("Generating {} plot in weekday successfully.".format(category))
 
 
 def save_cases_to_csv(df_categories: dict):
     for category, df_category in df_categories.items():
-        dt_now = datetime.now()
-        filename = "../data/{}_{}_{}_{}_post_processing.csv".format(category, dt_now.day, dt_now.month, dt_now.year)
+        filename = "../data/{}_post_processing.csv".format(category)
         df_category.to_csv(filename)
+        print("Generating for {} CSV file successfully".format(category))
 
 
 def line_format(label):
