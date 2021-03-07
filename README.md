@@ -23,9 +23,7 @@ The data is from https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk
 - [ ] Provide public API.   
   - [ ] Use fastAPI directly.
   - [ ] Use InfluxDB to store timeseries data, for backend using Laravel OAuth with token.
-- [ ] Make more visualization plot in notebooks.
 - [ ] Build front-end app using Dash.
-- [ ] Build k-Means model for clustering zone.
 - [ ] ... 
 
 ### Completed ✓
@@ -36,12 +34,12 @@ The data is from https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk
 - [x] Run automation for updating plot started in 19:30 GMT+7
 - [x] Generate aggregation plot so we get insight for monthly and for weekday on daily cases.
 - [x] Generate CSV file for post processing result
-
+- [x] Build k-Means model for clustering zone.
 
 ### How to Contribute
 You can contribute to this repository, feel free to do pull request. I will review your PR.
 
-## More Provinces API 
+### More Provinces API 
 | Province      | API      |
 | :---        |    :----             |
 | Aceh      | https://apicovid.bravo.siat.web.id/api/v_update_covid19 |
@@ -97,7 +95,9 @@ You can contribute to this repository, feel free to do pull request. I will revi
 - [New Dead Cases](#New-Dead-Cases)    
 - [Total Confirmed Cases](#Total-Confirmed-Cases)    
 - [Total Cured Cases](#Total-Cured-Cases)    
-- [Total Dead Cases](#Total-Dead-Cases)    
+- [Total Dead Cases](#Total-Dead-Cases)  
+
+#### [Clustering Zone](#Clustering-Zone)  
 
    
 #### Pulau Jawa
@@ -751,3 +751,5 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ### Total Dead Cases
 ![Total Dead Cases](images/Meninggal%20Dunia_Semua_Provinsi.png?raw=true "Total Dead Cases on All Provinces")
 
+## Clustering Zone
+![Culstering Zone](images/K-Means__Semua_Provinsi.png?raw=true "Clustering Zone")
