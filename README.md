@@ -97,8 +97,9 @@ You can contribute to this repository, feel free to do pull request. I will revi
 - [Total Cured Cases](#Total-Cured-Cases)    
 - [Total Dead Cases](#Total-Dead-Cases)  
 
-#### [Clustering Zone](#Clustering-Zone)  
 
+#### Clustering Zone
+![Culstering Zone](images/K-Means__Semua_Provinsi.png?raw=true "Clustering Zone")
    
 #### Pulau Jawa
 ##### Jakarta
@@ -751,5 +752,3 @@ You can contribute to this repository, feel free to do pull request. I will revi
 ### Total Dead Cases
 ![Total Dead Cases](images/Meninggal%20Dunia_Semua_Provinsi.png?raw=true "Total Dead Cases on All Provinces")
 
-## Clustering Zone
-![Culstering Zone](images/K-Means__Semua_Provinsi.png?raw=true "Clustering Zone")
