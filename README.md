@@ -100,6 +100,11 @@ You can contribute to this repository, feel free to do pull request. I will revi
 
 #### Clustering Zone
 ![Culstering Zone](images/K-Means__Semua_Provinsi.png?raw=true "Clustering Zone")
+
+
+![Culstering Zone 2](images/K-Means_Weekly_Semua_Provinsi.png?raw=true "Clustering Zone 2")
+
+![Culstering Zone 3](images/K-Means_Weekly_no_norm_Semua_Provinsi.png?raw=true "Clustering Zone 3")
    
 #### Pulau Jawa
 ##### Jakarta
