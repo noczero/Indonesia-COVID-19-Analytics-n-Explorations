@@ -437,7 +437,7 @@ def generate_clustering_plot(y_predicts: list, df_features_x: pd.DataFrame, df_f
     for index, rows in df_features.iterrows():
         plt.annotate(index, (rows[0], rows[1]))
 
-    latest_dt = pd.to_datetime(df_date_time['Kasus Aktif'].tail(1))
+    latest_dt = pd.to_datetime(df_date_time.tail(1))
     readable_datetime = latest_dt.dt.strftime('%A, %d-%B-%Y').values[0]
     plt.title("Zona Clustering di Indonesia\n {}".format(readable_datetime))
     plt.xlabel(plot_properties['x_label'])
