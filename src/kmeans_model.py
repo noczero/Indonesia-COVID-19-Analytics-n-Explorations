@@ -1,10 +1,8 @@
-import pandas as pd
 from sklearn.cluster import KMeans
-from matplotlib import pyplot as plt
 import locale
 
 locale.setlocale(locale.LC_TIME, "id_ID")
-from src.utils import load_data_postprocessing, process_weekly_features, process_daily_features, \
+from utils import load_data_postprocessing, process_weekly_features, process_daily_features, \
     generate_clustering_plot, load_data_population
 
 
