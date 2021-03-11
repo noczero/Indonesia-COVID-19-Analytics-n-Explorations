@@ -1,5 +1,6 @@
 import subprocess as cmd
-from covid19 import Covid19
+from src.covid19 import Covid19
+from src.kmeans_model import KMEANS_Covid
 import schedule
 import time
 from datetime import datetime
@@ -18,6 +19,15 @@ def run_automation():
 
     # generate csv
     indo_covid19.generate_csv()
+
+    # k-Means
+    kmeans_covid = KMEANS_Covid()
+    print("Daily Clustering")
+    kmeans_covid.model_daily_cured_death_rate(n_clusters=5)
+    print("Weekly Clustering")
+    kmeans_covid.model_weekly_active_newactivecapita_average(n_clusters=3)
+    print("Weekly Clustering No-Norm")
+    kmeans_covid.model_weekly_active_newactive_average_no_norm(n_clusters=2)
 
     # push new files
     do_git_push_cmd()
