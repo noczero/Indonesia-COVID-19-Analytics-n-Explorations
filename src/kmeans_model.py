@@ -31,7 +31,7 @@ class KMEANS_Covid:
                                  df_features_x=features['daily_cured_rate'],
                                  df_features_y=features['daily_death_rate'],
                                  df_features_size=self.df_populations['population'],
-                                 df_date_time=self.df_date_time,
+                                 df_date_time=self.df_date_time['Total Case'],
                                  plot_properties=plot_properties)
 
     def model_weekly_active_newactivecapita_average(self, n_clusters):
@@ -53,7 +53,7 @@ class KMEANS_Covid:
                                  df_features_x=features['weekly_active_average'],
                                  df_features_y=features['weekly_confirmed_capita'],
                                  df_features_size=self.df_populations['population'],
-                                 df_date_time=self.df_date_time,
+                                 df_date_time=self.df_date_time['Total Case'],
                                  plot_properties=plot_properties)
 
     def model_weekly_active_newactive_average_no_norm(self, n_clusters):
@@ -75,7 +75,7 @@ class KMEANS_Covid:
                                  df_features_x=features['weekly_active_average'],
                                  df_features_y=features['weekly_confirmed_average'],
                                  df_features_size=self.df_populations['population'],
-                                 df_date_time=self.df_date_time,
+                                 df_date_time=self.df_date_time['Total Case'],
                                  plot_properties=plot_properties)
 
 
