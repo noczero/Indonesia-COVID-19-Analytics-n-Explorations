@@ -7,6 +7,7 @@ import seaborn as sns
 from matplotlib.dates import DateFormatter
 # Handle date time conversions between pandas and matplotlib
 from pandas.plotting import register_matplotlib_converters
+from typing import Tuple, Dict
 
 register_matplotlib_converters()
 
@@ -286,3 +287,161 @@ def line_format(label):
     if month == 'Jan':
         month += f'\n{label.year}'
     return month
+
+
+def load_data_population():
+    # get population information
+    df_populations = pd.read_excel('../data/Jumlah_Penduduk_Indonesia_2020.xlsx')
+    #df_populations.info()
+
+    df_populations['2020'] = df_populations['2020'] * 1000  # multiple to thousand
+
+    # mapping
+    df_populations['Provinsi'] = df_populations['Provinsi'].apply(lambda name: province_name_to_abr(name))
+
+    # set index
+    df_populations = df_populations.set_index('Provinsi')
+
+    # rename column
+    df_populations = df_populations.rename(columns={'2020': 'population'})
+
+    return df_populations
+
+
+def province_name_to_abr(province_name: str) -> str:
+    # Bengkulu,DIY,Jakarta,Jambi,Jabar,Jateng,Jatim,Kalbar,Kaltim,Kalteng,Kalsel,Kaltara,Kep Riau,NTB,Sumsel,Sumbar,Sulut,Sumut,Sultra,Sulsel,Sulteng,Lampung,Riau,Malut,Maluku,Papbar,Papua,Sulbar,NTT,Gorontalo
+    provinces_map = {
+        'SUMATERA UTARA': 'Sumut',
+        'KEP. BANGKA BELITUNG': 'Babel',
+        'SUMATERA BARAT': 'Sumbar',
+        'SUMATERA SELATAN': 'Sumsel',
+        'KEP. BANGKA BELITUNG': 'Babel',
+        'KEP. RIAU': 'Kep Riau',
+        'DKI JAKARTA': 'Jakarta',
+        'JAWA BARAT': 'Jabar',
+        'JAWA TENGAH': 'Jateng',
+        'DI YOGYAKARTA': 'DIY',
+        'JAWA TIMUR': 'Jatim',
+        'NUSA TENGGARA BARAT': 'NTB',
+        'NUSA TENGGARA TIMUR': 'NTT',
+        'KALIMANTAN BARAT': 'Kalbar',
+        'KALIMANTAN TENGAH': 'Kalteng',
+        'KALIMANTAN SELATAN': 'Kalsel',
+        'KALIMANTAN TIMUR': 'Kaltim',
+        'KALIMANTAN UTARA': 'Kaltara',
+        'SULAWESI UTARA': 'Sulut',
+        'SULAWESI TENGAH': 'Sulteng',
+        'SULAWESI SELATAN': 'Sulsel',
+        'SULAWESI TENGGARA': 'Sultra',
+        'SULAWESI BARAT': 'Sulbar',
+        'MALUKU UTARA': 'Malut',
+        'PAPUA BARAT': 'Papbar'
+    }
+
+    try:
+        return provinces_map[province_name]
+    except:
+        return province_name.capitalize()
+
+
+# K-Means utils
+def load_data_postprocessing() -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]]:
+    files_categories = {
+        'Kasus Harian': 'Kasus Harian_post_processing.csv',
+        'Kasus Aktif': 'Kasus Aktif_post_processing.csv',
+        'Sembuh Harian': 'Sembuh Harian_post_processing.csv',
+        'Sembuh': 'Sembuh Harian_post_processing.csv',
+        'Meninggal Dunia Harian': 'Meninggal Dunia Harian_post_processing.csv',
+        'Meninggal Dunia': 'Meninggal Dunia_post_processing.csv',
+        'Total Case': 'Total Case_post_processing.csv'
+    }
+
+    df_categories = {}
+    df_date_time = {}
+    for category in files_categories:
+        # get the value
+        csv_file_name = "../data/{}".format(files_categories[category])
+
+        # load data
+        df_categories[category] = pd.read_csv(csv_file_name)
+        df_date_time[category] = df_categories[category].pop('Time')
+        # df_categories[category].info()
+
+    return df_categories, df_date_time
+
+
+def process_daily_features(df_categories: [dict, pd.DataFrame]) -> pd.DataFrame:
+    # df_features = pd.DataFrame()
+    df_daily_cured_rate = df_categories['Sembuh Harian'].tail(1) / df_categories['Kasus Aktif'].tail(1)
+    df_daily_death_rate = df_categories['Meninggal Dunia Harian'].tail(1) / df_categories['Kasus Aktif'].tail(
+        1)
+
+    # concat dataframe
+    frames = [df_daily_cured_rate, df_daily_death_rate]
+    df_features = pd.concat(frames)
+    df_features = df_features.reset_index()
+    del df_features['index']
+
+    # rename columns for clearer dataframe
+    df_features = df_features.rename(index={0: 'daily_cured_rate', 1: 'daily_death_rate'})
+
+    # transpose df_features
+    df_features = df_features.transpose()
+
+    # normalization using min max scalar value-min/max-min
+    df_features = (df_features - df_features.min()) / (df_features.max() - df_features.min())
+
+    return df_features
+
+
+def process_weekly_features(df_categories: [dict, pd.DataFrame], norm=True) -> pd.DataFrame:
+    # merge join by index and rename
+    df_weekly_features = pd.DataFrame()
+    df_weekly_features['weekly_active_average'] = df_categories['Kasus Aktif'].tail(7).mean()
+    df_weekly_features['weekly_confirmed_average'] = df_categories['Kasus Harian'].tail(7).mean()
+
+    # merge
+    df_populations = load_data_population()
+    df_new_features = pd.merge(df_populations, df_weekly_features, how="inner", left_index=True, right_index=True)
+
+    # add per capita columns
+    df_new_features['weekly_active_capita'] = df_new_features['weekly_active_average'] / df_new_features[
+        'population'] * 100
+    df_new_features['weekly_confirmed_capita'] = df_new_features['weekly_confirmed_average'] / df_new_features[
+        'population'] * 100
+    # df_new_features.head()
+
+    if norm:
+        # df_features_norm = ( df_new_features[['weekly_active_average','weekly_confirmed_capita']] - df_new_features[['weekly_active_average','weekly_confirmed_capita']].min() ) / ( df_new_features[['weekly_active_average','weekly_confirmed_capita']].max() - df_new_features[['weekly_active_average','weekly_confirmed_capita']].min() )
+        df_features_norm = (df_new_features - df_new_features.min()) / (df_new_features.max() - df_new_features.min())
+        # df_features_norm
+        return df_features_norm
+    else:
+        return df_new_features
+
+def generate_clustering_plot(y_predicts: list, df_features_x: pd.DataFrame, df_features_y: pd.DataFrame,
+                             df_features_size: pd.DataFrame, df_date_time: pd.DataFrame, plot_properties: dict):
+    # set size for plot from mean of 2 columns
+    size_points =  df_features_size / 10000
+
+    # visualize
+    fig = plt.figure(figsize=(14, 12))
+    ax = plt.subplot(111)
+    plt.scatter(df_features_x, df_features_y, c=y_predicts, s=size_points,
+                alpha=0.7, cmap='plasma')
+    ax.grid(True)
+
+    # merge
+    df_features = pd.merge(df_features_x, df_features_y, right_index=True, left_index=True)
+
+    for index, rows in df_features.iterrows():
+        plt.annotate(index, (rows[0], rows[1]))
+
+    latest_dt = pd.to_datetime(df_date_time['Kasus Aktif'].tail(1))
+    readable_datetime = latest_dt.dt.strftime('%A, %d-%B-%Y').values[0]
+    plt.title("Zona Clustering di Indonesia\n {}".format(readable_datetime))
+    plt.xlabel(plot_properties['x_label'])
+    plt.ylabel(plot_properties['y_label'])
+    plt.subplots_adjust()
+    plt.savefig('../images/{}_Semua_Provinsi.png'.format(plot_properties['name']), dpi=100, bbox_inches='tight')
+    plt.close()
