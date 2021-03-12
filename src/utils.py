@@ -292,7 +292,7 @@ def line_format(label):
 def load_data_population():
     # get population information
     df_populations = pd.read_excel('../data/Jumlah_Penduduk_Indonesia_2020.xlsx')
-    #df_populations.info()
+    # df_populations.info()
 
     df_populations['2020'] = df_populations['2020'] * 1000  # multiple to thousand
 
@@ -391,6 +391,10 @@ def process_daily_features(df_categories: [dict, pd.DataFrame]) -> pd.DataFrame:
     # normalization using min max scalar value-min/max-min
     df_features = (df_features - df_features.min()) / (df_features.max() - df_features.min())
 
+    # join populations
+    df_populations = load_data_population()
+    df_features = pd.merge(df_populations, df_features, left_index=True, right_index=True)
+
     return df_features
 
 
@@ -419,10 +423,11 @@ def process_weekly_features(df_categories: [dict, pd.DataFrame], norm=True) -> p
     else:
         return df_new_features
 
+
 def generate_clustering_plot(y_predicts: list, df_features_x: pd.DataFrame, df_features_y: pd.DataFrame,
                              df_features_size: pd.DataFrame, df_date_time: pd.DataFrame, plot_properties: dict):
     # set size for plot from mean of 2 columns
-    size_points =  df_features_size / 10000
+    size_points = df_features_size / 10000
 
     # visualize
     fig = plt.figure(figsize=(14, 12))

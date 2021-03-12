@@ -9,14 +9,13 @@ from utils import load_data_postprocessing, process_weekly_features, process_dai
 class KMEANS_Covid:
     def __init__(self):
         self.df_categories, self.df_date_time = load_data_postprocessing()
-        self.df_populations = load_data_population()
 
     def model_daily_cured_death_rate(self, n_clusters):
         # feature engineering
         features = process_daily_features(self.df_categories)
 
         # predicts class
-        y_predicts = KMeans(n_clusters=n_clusters).fit_predict(features.astype('float16'))
+        y_predicts = KMeans(n_clusters=n_clusters).fit_predict(features[['daily_cured_rate','daily_death_rate']].astype('float16'))
 
         # generate plot
         plot_properties = {
@@ -28,7 +27,7 @@ class KMEANS_Covid:
         generate_clustering_plot(y_predicts=y_predicts,
                                  df_features_x=features['daily_cured_rate'],
                                  df_features_y=features['daily_death_rate'],
-                                 df_features_size=self.df_populations['population'],
+                                 df_features_size=features['population'],
                                  df_date_time=self.df_date_time['Total Case'],
                                  plot_properties=plot_properties)
 
