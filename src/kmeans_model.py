@@ -1,7 +1,7 @@
 from sklearn.cluster import KMeans
 import locale
 
-locale.setlocale(locale.LC_TIME, "id_ID")
+#locale.setlocale(locale.LC_TIME, "id_ID")
 from utils import load_data_postprocessing, process_weekly_features, process_daily_features, \
     generate_clustering_plot, load_data_population
 
@@ -16,7 +16,7 @@ class KMEANS_Covid:
         features = process_daily_features(self.df_categories)
 
         # predicts class
-        y_predicts = KMeans(n_clusters=n_clusters).fit_predict(features)
+        y_predicts = KMeans(n_clusters=n_clusters).fit_predict(features.astype('float16'))
 
         # generate plot
         plot_properties = {
@@ -38,7 +38,7 @@ class KMEANS_Covid:
 
         # predicts class
         y_predicts = KMeans(n_clusters=n_clusters).fit_predict(
-            features[['weekly_active_average', 'weekly_confirmed_capita']])
+            features[['weekly_active_average', 'weekly_confirmed_capita']].astype('float16'))
 
         # generate plot
         plot_properties = {
@@ -50,7 +50,7 @@ class KMEANS_Covid:
         generate_clustering_plot(y_predicts=y_predicts,
                                  df_features_x=features['weekly_active_average'],
                                  df_features_y=features['weekly_confirmed_capita'],
-                                 df_features_size=self.df_populations['population'],
+                                 df_features_size=features['population'],
                                  df_date_time=self.df_date_time['Total Case'],
                                  plot_properties=plot_properties)
 
@@ -60,7 +60,7 @@ class KMEANS_Covid:
 
         # predicts class
         y_predicts = KMeans(n_clusters=n_clusters).fit_predict(
-            features[['weekly_active_average', 'weekly_confirmed_average']])
+            features[['weekly_active_average', 'weekly_confirmed_average']].astype('float16'))
 
         # generate plot
         plot_properties = {
@@ -72,7 +72,7 @@ class KMEANS_Covid:
         generate_clustering_plot(y_predicts=y_predicts,
                                  df_features_x=features['weekly_active_average'],
                                  df_features_y=features['weekly_confirmed_average'],
-                                 df_features_size=self.df_populations['population'],
+                                 df_features_size=features['population'],
                                  df_date_time=self.df_date_time['Total Case'],
                                  plot_properties=plot_properties)
 
