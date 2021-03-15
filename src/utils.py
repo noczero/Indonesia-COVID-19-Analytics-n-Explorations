@@ -417,9 +417,12 @@ def process_weekly_features(df_categories: [dict, pd.DataFrame], norm=True) -> p
 
     if norm:
         # df_features_norm = ( df_new_features[['weekly_active_average','weekly_confirmed_capita']] - df_new_features[['weekly_active_average','weekly_confirmed_capita']].min() ) / ( df_new_features[['weekly_active_average','weekly_confirmed_capita']].max() - df_new_features[['weekly_active_average','weekly_confirmed_capita']].min() )
-        df_features_norm = (df_new_features - df_new_features.min()) / (df_new_features.max() - df_new_features.min())
+        #df_features_norm = (df_new_features - df_new_features.min()) / (df_new_features.max() - df_new_features.min())
+        df_new_features['weekly_active_average'] = (df_new_features['weekly_active_average'] - df_new_features['weekly_active_average'].min()) / (df_new_features['weekly_active_average'].max() - df_new_features['weekly_active_average'].min())
+        df_new_features['weekly_confirmed_capita'] = (df_new_features['weekly_confirmed_capita'] - df_new_features['weekly_confirmed_capita'].min()) / (df_new_features['weekly_confirmed_capita'].max() - df_new_features['weekly_confirmed_capita'].min())
+
         # df_features_norm
-        return df_features_norm
+        return df_new_features
     else:
         return df_new_features
 
