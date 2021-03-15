@@ -11,25 +11,29 @@ class KMEANS_Covid:
         self.df_categories, self.df_date_time = load_data_postprocessing()
 
     def model_daily_cured_death_rate(self, n_clusters):
-        # feature engineering
-        features = process_daily_features(self.df_categories)
 
-        # predicts class
-        y_predicts = KMeans(n_clusters=n_clusters).fit_predict(features[['daily_cured_rate','daily_death_rate']].astype('float16'))
+        try:
+            # feature engineering
+            features = process_daily_features(self.df_categories)
 
-        # generate plot
-        plot_properties = {
-            'name': 'K-Means-Daily',
-            'x_label': 'Rate Sembuh Harian \n Normalisasi Min-Max(0-1)',
-            'y_label': 'Rate Meninggal Harian \n Normalisasi Min-Max(0-1)'
-        }
+            # predicts class
+            y_predicts = KMeans(n_clusters=n_clusters).fit_predict(features[['daily_cured_rate','daily_death_rate']].astype('float16'))
 
-        generate_clustering_plot(y_predicts=y_predicts,
-                                 df_features_x=features['daily_cured_rate'],
-                                 df_features_y=features['daily_death_rate'],
-                                 df_features_size=features['population'],
-                                 df_date_time=self.df_date_time['Total Case'],
-                                 plot_properties=plot_properties)
+            # generate plot
+            plot_properties = {
+                'name': 'K-Means-Daily',
+                'x_label': 'Rate Sembuh Harian \n Normalisasi Min-Max(0-1)',
+                'y_label': 'Rate Meninggal Harian \n Normalisasi Min-Max(0-1)'
+            }
+
+            generate_clustering_plot(y_predicts=y_predicts,
+                                     df_features_x=features['daily_cured_rate'],
+                                     df_features_y=features['daily_death_rate'],
+                                     df_features_size=features['population'],
+                                     df_date_time=self.df_date_time['Total Case'],
+                                     plot_properties=plot_properties)
+        except:
+            print("Null value, active case 0.")
 
     def model_weekly_active_newactivecapita_average(self, n_clusters):
         # feature engineering
@@ -80,8 +84,8 @@ class KMEANS_Covid:
 
 if __name__ == '__main__':
     kmeans_covid = KMEANS_Covid()
-    print("Daily Clustering")
-    kmeans_covid.model_daily_cured_death_rate(n_clusters=5)
+    #print("Daily Clustering")
+    #kmeans_covid.model_daily_cured_death_rate(n_clusters=5)
     print("Weekly Clustering")
     kmeans_covid.model_weekly_active_newactivecapita_average(n_clusters=3)
     print("Weekly Clustering No-Norm")
