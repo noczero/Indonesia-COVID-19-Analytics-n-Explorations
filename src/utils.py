@@ -350,7 +350,7 @@ def load_data_postprocessing() -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.Da
         'Kasus Harian': 'Kasus Harian_post_processing.csv',
         'Kasus Aktif': 'Kasus Aktif_post_processing.csv',
         'Sembuh Harian': 'Sembuh Harian_post_processing.csv',
-        'Sembuh': 'Sembuh Harian_post_processing.csv',
+        'Sembuh': 'Sembuh_post_processing.csv',
         'Meninggal Dunia Harian': 'Meninggal Dunia Harian_post_processing.csv',
         'Meninggal Dunia': 'Meninggal Dunia_post_processing.csv',
         'Total Case': 'Total Case_post_processing.csv'
