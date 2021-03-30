@@ -1,3 +1,4 @@
+import aiohttp
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -5,7 +6,7 @@ from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
 
-from src.utils import load_data_postprocessing
+from src.utils import load_data_postprocessing,province_name_to_abr
 
 app = dash.Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}], title="Indonesia COVID-19")
 
@@ -322,8 +323,7 @@ app.layout = html.Div([
 
         # Plot Line Char
         html.Div([
-            dcc.Graph(id="line_chart")
-
+            dcc.Graph(id="new_cases_line_chart")
         ], className="create_container five columns"),
 
     ], className="row flex-display"),
@@ -371,7 +371,7 @@ def update_new_cases(province):
         )],
         'layout': go.Layout(
             title={
-                'text': 'Kasus Terkonfirmasi',
+                'text': 'Kasus Harian',
                 'y': 1,
                 'x': 0.5,
                 'xanchor': 'center',
@@ -565,8 +565,8 @@ def update_graph(province):
                 'xanchor': 'center',
                 'yanchor': 'top'},
             titlefont={
-                       'color': 'white',
-                       'size': 20},
+                'color': 'white',
+                'size': 20},
             legend={
                 'orientation': 'h',
                 'bgcolor': '#1f2c56',
@@ -575,11 +575,189 @@ def update_graph(province):
                 family="sans-serif",
                 size=12,
                 color='white')
+        ),
+
+    }
+
+
+# Timeline plot
+@app.callback(Output('new_cases_line_chart', 'figure'),
+              [Input('province', 'value')])
+def update_graph(province):
+    # daily confirmed
+    df_new_active = df_categories['Kasus Harian'][province]
+    df_date = pd.to_datetime(df_times['Kasus Harian'])
+    df_rolling_average = df_new_active.rolling(window=7).mean()
+
+    result = {
+        'data': [go.Bar(x=df_date.tail(30),
+                        y=df_new_active.tail(30),
+
+                        name='Kasus Harian',
+                        marker=dict(
+                            color='orange'),
+                        hoverinfo='text',
+                        hovertext=
+                        '<b>Waktu</b>: ' + df_date.tail(30).astype(str) + '<br>' +
+                        '<b>Kasus Harian</b>: ' + [f'{x:,.0f}' for x in df_new_active.tail(30)] + '<br>' +
+                        '<b>Provinsi</b>: ' + province + '<br>'
+
+                        ),
+                 go.Scatter(x=df_date.tail(30),
+                            y=df_rolling_average.tail(30),
+                            mode='lines',
+                            name='Rata-rata mingguan kasus harian',
+                            line=dict(width=3, color='#FF00FF'),
+                            # marker=dict(
+                            #     color='green'),
+                            hoverinfo='text',
+                            hovertext=
+                            '<b>Waktu</b>: ' + df_date.tail(30).astype(str) + '<br>' +
+                            '<b>Rata-rata Mingguan Kasus Harian</b>: ' + [f'{x:,.0f}' for x in
+                                                                          df_rolling_average.tail(30)] + '<br>'
+                            )],
+
+        'layout': go.Layout(
+            plot_bgcolor='#1f2c56',
+            paper_bgcolor='#1f2c56',
+            title={
+                'text': '30 Hari Terakhir Kasus Harian di ' + (province),
+                'y': 0.93,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'},
+            titlefont={
+                'color': 'white',
+                'size': 20},
+
+            hovermode='x',
+            margin=dict(r=0),
+            xaxis=dict(title='<b>Waktu</b>',
+                       color='white',
+                       showline=True,
+                       showgrid=True,
+                       showticklabels=True,
+                       linecolor='white',
+                       linewidth=2,
+                       ticks='outside',
+                       tickfont=dict(
+                           family='Arial',
+                           size=12,
+                           color='white'
+                       )
+
+                       ),
+
+            yaxis=dict(title='<b>Kasus Harian</b>',
+                       color='white',
+                       showline=True,
+                       showgrid=True,
+                       showticklabels=True,
+                       linecolor='white',
+                       linewidth=2,
+                       ticks='outside',
+                       tickfont=dict(
+                           family='Arial',
+                           size=12,
+                           color='white'
+                       )
+
+                       ),
+
+            legend={
+                'orientation': 'h',
+                'bgcolor': '#1f2c56',
+                'xanchor': 'center', 'x': 0.5, 'y': -0.3},
+            font=dict(
+                family="sans-serif",
+                size=12,
+                color='white'),
+
+        )
+
+    }
+    return result
+
+
+@app.callback(Output('map', 'figure'),
+              [Input('province', 'value')])
+def update_graph(province):
+    # covid_data_3 = covid_data.groupby(['Lat', 'Long', 'Country/Region'])[['confirmed', 'death', 'recovered', 'active']].max().reset_index()
+    # covid_data_4 = covid_data_3[covid_data_3['Country/Region'] == w_countries]
+    #other_covid19_data = get_covid_19_data()
+    #print(other_covid19_data)
+    df_province_geo_location = pd.read_json("../data/geo_location_provinces.json")
+    df_province_geo_location['province'] = df_province_geo_location['name'].apply(lambda name: province_name_to_abr(name))
+    #print(df_province_geo_location.head(5))
+    df_province_geo_location = df_province_geo_location.set_index('province')
+
+    #print(df_province_geo_location.index("Aceh"))
+
+
+
+    latitude = df_province_geo_location['latitude'][df_province_geo_location.index == province]
+    longitude = df_province_geo_location['longitude'][df_province_geo_location.index == province]
+    jumlah_kasus = df_categories['Total Case'][province].iloc[-1]
+    jumlah_sembuh = df_categories['Sembuh'][province].iloc[-1]
+    jumlah_aktif = df_categories['Kasus Aktif'][province].iloc[-1]
+    jumlah_meninggal = df_categories['Meninggal Dunia'][province].iloc[-1]
+
+    if province:
+        zoom = 8
+        zoom_lat = latitude.values[0]
+        zoom_lon = longitude.values[0]
+
+    result = {
+        'data': [go.Scattermapbox(
+            lon=longitude.values,
+            lat=latitude.values,
+            mode='markers',
+            marker=go.scattermapbox.Marker(
+                size=jumlah_kasus / 400,
+                color=jumlah_kasus,
+                colorscale='hsv',
+                showscale=False,
+                sizemode='area',
+                opacity=0.3),
+
+            hoverinfo='text',
+            hovertext=
+            '<b>Provinsi </b>: ' + province + '<br>' +
+            '<b>Lintang</b>: ' + str(latitude.values[0]) + '<br>' +
+            '<b>Bujur</b>: ' + str(longitude.values[0]) + '<br>' +
+            '<b>Jumlah Kasus</b>: ' + str(jumlah_kasus) + '<br>' +
+            '<b>Jumlah Sembuh</b>: ' + str(jumlah_sembuh) + '<br>' +
+            '<b>Jumlah Meninggal</b>: ' + str(jumlah_meninggal) + '<br>' +
+            '<b>Jumlah Aktif</b>: ' + str(jumlah_aktif) + '<br>'
+
+        )],
+
+        'layout': go.Layout(
+            margin={"r": 0, "t": 0, "l": 0, "b": 0},
+            # width=1820,
+            # height=650,
+            hovermode='closest',
+            mapbox=dict(
+                accesstoken='pk.eyJ1IjoicXM2MjcyNTI3IiwiYSI6ImNraGRuYTF1azAxZmIycWs0cDB1NmY1ZjYifQ.I1VJ3KjeM-S613FLv3mtkw',
+                center=go.layout.mapbox.Center(lat=zoom_lat, lon=zoom_lon),
+                # style='open-street-map',
+                style='dark',
+                zoom=zoom
             ),
+            autosize=True,
+
+        )
+
+    }
 
 
-        }
+    return result
 
+
+async def get_covid_19_data():
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url="https://data.covid19.go.id/public/api/prov.json") as resp:
+            return await resp.json()
 
 
 if __name__ == '__main__':
