@@ -1,5 +1,7 @@
-from utils import preprocessing, load_data, save_plot, save_plot_all_province, save_plot_monthly, save_plot_weekday, save_cases_to_csv
+from .utils import preprocessing, load_data, save_plot, save_plot_all_province, save_plot_monthly, save_plot_weekday, \
+    save_cases_to_csv, load_data_postprocessing
 import pandas as pd
+
 
 class Covid19:
     def __init__(self, url):
@@ -61,7 +63,5 @@ if __name__ == '__main__':
 
     print("\nStill Active")
     print(indo_covid19.get_still_active_case())
-    #indo_covid19.generate_plot()
+    # indo_covid19.generate_plot()
     indo_covid19.generate_aggregation_plot()
-
-
