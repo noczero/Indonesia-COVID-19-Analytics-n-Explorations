@@ -1,5 +1,7 @@
-from utils import preprocessing, load_data, save_plot, save_plot_all_province, save_plot_monthly, save_plot_weekday, save_cases_to_csv
+from .utils import preprocessing, load_data, save_plot, save_plot_all_province, save_plot_monthly, save_plot_weekday, \
+    save_cases_to_csv, load_data_postprocessing
 import pandas as pd
+
 
 class Covid19:
     def __init__(self, url):
