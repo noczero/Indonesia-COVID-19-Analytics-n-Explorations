@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  ui:
+    container_name: "dash-ui-covid19"
+    build: .
+    volumes:
+      - ./ui:/app/ui
+      - ./src:/app/src
+      - ./data:/app/data
+    restart: always
+    ports:
+      - 8080:8080
+
