@@ -8,6 +8,12 @@ from matplotlib.dates import DateFormatter
 # Handle date time conversions between pandas and matplotlib
 from pandas.plotting import register_matplotlib_converters
 from typing import Tuple, Dict
+import os
+from pathlib import Path
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # This is your Project Root
+DATA_PATH = os.path.join(ROOT_DIR, 'data')
+IMAGES_PATH = os.path.join(ROOT_DIR, 'images')
 
 register_matplotlib_converters()
 
@@ -147,7 +153,7 @@ def save_plot(df_categories: dict):
 
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig('../images/{}_{}.png'.format(category, province), dpi=100)
+            plt.savefig('{}/{}_{}.png'.format(category,IMAGES_PATH, province), dpi=100)
             plt.close()
 
         print("Generating {} plot successfully.".format(category))
@@ -193,7 +199,7 @@ def save_plot_all_province(df_categories: dict):
             ax.xaxis.set_major_formatter(date_form)
 
             plt.subplots_adjust()
-            plt.savefig('../images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+            plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH,category), dpi=100, bbox_inches='tight')
             plt.close()
         else:
             # bar
@@ -226,7 +232,7 @@ def save_plot_all_province(df_categories: dict):
             ax.xaxis.set_major_formatter(date_form)
 
             plt.subplots_adjust()
-            plt.savefig('../images/{}_Semua_Provinsi.png'.format(category), dpi=100, bbox_inches='tight')
+            plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH,category), dpi=100, bbox_inches='tight')
             plt.close()
 
         print("Generating join {} plot successfully.".format(category))
@@ -244,7 +250,7 @@ def save_plot_monthly(df_categories: dict):
                                               color='tab:red').set(xlabel='Waktu', ylabel='Orang')
                 ax.set_xticklabels(map(line_format, df_monthly_avg[province].index))
                 plt.tight_layout()
-                ax.figure.savefig('../images/{} Rata-Rata di {}'.format(category, province), dpi=100)
+                ax.figure.savefig('{}/{} Rata-Rata di {}'.format(IMAGES_PATH,category, province), dpi=100)
                 plt.close()
 
             print("Generating {} plot in month successfully.".format(category))
@@ -266,7 +272,7 @@ def save_plot_weekday(df_categories: dict):
                                              color='tab:red').set(xlabel='Waktu', ylabel='Orang')
                 ax.set_xticklabels(days)
                 plt.tight_layout()
-                ax.figure.savefig('../images/{} Rata-Rata dalam Hari di {}'.format(category, province), dpi=100)
+                ax.figure.savefig('{}/{} Rata-Rata dalam Hari di {}'.IMAGES_PATH,format(category, province), dpi=100)
                 plt.close()
 
             print("Generating {} plot in weekday successfully.".format(category))
@@ -274,7 +280,7 @@ def save_plot_weekday(df_categories: dict):
 
 def save_cases_to_csv(df_categories: dict):
     for category, df_category in df_categories.items():
-        filename = "../data/{}_post_processing.csv".format(category)
+        filename = "{}/{}_post_processing.csv".format(DATA_PATH,category)
         df_category.to_csv(filename)
         print("Generating for {} CSV file successfully".format(category))
 
@@ -291,7 +297,7 @@ def line_format(label):
 
 def load_data_population():
     # get population information
-    df_populations = pd.read_excel('../data/Jumlah_Penduduk_Indonesia_2020.xlsx')
+    df_populations = pd.read_excel(f'{DATA_PATH}/Jumlah_Penduduk_Indonesia_2020.xlsx')
     # df_populations.info()
 
     df_populations['2020'] = df_populations['2020'] * 1000  # multiple to thousand
@@ -337,11 +343,11 @@ def province_name_to_abr(province_name: str) -> str:
         'MALUKU UTARA': 'Malut',
         'PAPUA BARAT': 'Papbar'
     }
-
-    try:
-        return provinces_map[province_name]
-    except:
-        return province_name.capitalize()
+    if province_name == province_name:
+        try:
+            return provinces_map[province_name]
+        except:
+            return province_name.capitalize()
 
 
 # K-Means utils
@@ -356,11 +362,13 @@ def load_data_postprocessing() -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.Da
         'Total Case': 'Total Case_post_processing.csv'
     }
 
+
+
     df_categories = {}
     df_date_time = {}
     for category in files_categories:
         # get the value
-        csv_file_name = "../data/{}".format(files_categories[category])
+        csv_file_name = "{}/{}".format(DATA_PATH,files_categories[category])
 
         # load data
         df_categories[category] = pd.read_csv(csv_file_name)
@@ -451,5 +459,5 @@ def generate_clustering_plot(y_predicts: list, df_features_x: pd.DataFrame, df_f
     plt.xlabel(plot_properties['x_label'])
     plt.ylabel(plot_properties['y_label'])
     plt.subplots_adjust()
-    plt.savefig('../images/{}_Semua_Provinsi.png'.format(plot_properties['name']), dpi=100, bbox_inches='tight')
+    plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH,plot_properties['name']), dpi=100, bbox_inches='tight')
     plt.close()
