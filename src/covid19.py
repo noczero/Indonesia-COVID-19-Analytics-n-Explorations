@@ -63,7 +63,5 @@ if __name__ == '__main__':
 
     print("\nStill Active")
     print(indo_covid19.get_still_active_case())
-    #indo_covid19.generate_plot()
+    # indo_covid19.generate_plot()
     indo_covid19.generate_aggregation_plot()
-
-
