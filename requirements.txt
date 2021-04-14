@@ -7,8 +7,3 @@ sklearn
 dash
 aiohttp
 dash-bootstrap-components
-schedule
-sklearn
-dash
-aiohttp
-dash-bootstrap-components
