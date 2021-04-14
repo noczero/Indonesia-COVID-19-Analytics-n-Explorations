@@ -2,20 +2,38 @@ import aiohttp
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
+import os
 
-from src.utils import load_data_postprocessing,province_name_to_abr
+from src.covid19 import Covid19
+from src.utils import load_data_postprocessing, province_name_to_abr
 
-app = dash.Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}], title="Indonesia COVID-19")
+# PATH
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # This is your Project Root
+DATA_PATH = os.path.join(ROOT_DIR, 'data')
+IMAGES_PATH = os.path.join(ROOT_DIR, 'images')
+
+# Update plot
+format = 'csv'  # export format
+sheet_gid = '2052139453'  # get from browser url when sheet clicked
+data_url = 'https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/export?format={}&gid={}'.format(
+    format, sheet_gid)
+indo_covid19 = Covid19(url=data_url)
+indo_covid19.generate_csv()
+
+STORAGE_URL = "https://github.com/noczero/Indonesia-COVID-19-Analytics-n-Explorations/blob/master"
+
+app = dash.Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}], title="Indonesia COVID-19",
+                external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # load post_processing data
 print("Load data...")
 df_categories, df_times = load_data_postprocessing()
 
 print("Config Layout...")
-# -- START LAYOUT
 app.layout = html.Div([
     # HEADER
     html.Div([
@@ -37,7 +55,7 @@ app.layout = html.Div([
                      },
                      )
         ],
-            className="one-third column",
+            className="text-center col-md-4",
             style={
                 "padding-top": "30px"
             }
@@ -47,14 +65,14 @@ app.layout = html.Div([
                 html.H3("Indonesia COVID-19 ", style={"margin-bottom": "0px", 'color': 'white'}),
                 html.H5("Analytics & Explorations", style={"margin-top": "0px", 'color': 'white'}),
             ])
-        ], className="one-half column", id="title"),
+        ], className="col-md-4", id="title"),
 
         html.Div([
             html.H6('Terakhir Diperbarui : ', style={'color': 'white'}),
             html.H6(str(df_times['Total Case'].iloc[-1]) + '  19:30 (GMT)',
                     style={'color': 'white'})
 
-        ], className="one-third column", id='title1'),
+        ], className="col-md-4", id='title1'),
 
     ], id="header", className="row flex-display", style={"margin-bottom": "25px"}),
 
@@ -62,227 +80,302 @@ app.layout = html.Div([
     html.Div([
         # Total Kasus di Indonesia
         html.Div([
-            html.H6(children='Total Kasus ',
+            html.Div([
+                html.H6(children='Total Kasus ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Total
+                html.P(f"{df_categories['Total Case'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                html.P(
+                    'Baru :  ' + f"{df_categories['Total Case'].iloc[-1].sum() - df_categories['Total Case'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(
+                            ((df_categories['Total Case'].iloc[-1].sum() - df_categories['Total Case'].iloc[-2].sum()) /
+                             df_categories['Total Case'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
-                    ),
-            # Jumlah Total
-            html.P(f"{df_categories['Total Case'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            html.P(
-                'Baru :  ' + f"{df_categories['Total Case'].iloc[-1].sum() - df_categories['Total Case'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(((df_categories['Total Case'].iloc[-1].sum() - df_categories['Total Case'].iloc[-2].sum()) /
-                           df_categories['Total Case'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
-            )
-        ], className="card_container three columns",
-        ),
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container",
+            ),
+        ], className="col-md-3"),
 
         # Kasus Aktif
         html.Div([
-            html.H6(children='Total Kasus Aktif ',
+            html.Div([
+                html.H6(children='Total Kasus Aktif ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Kasus Aktif
+                html.P(f"{df_categories['Kasus Aktif'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                html.P(
+                    'Baru :  ' + f"{df_categories['Kasus Aktif'].iloc[-1].sum() - df_categories['Kasus Aktif'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(((df_categories['Kasus Aktif'].iloc[-1].sum() - df_categories['Kasus Aktif'].iloc[
+                            -2].sum()) /
+                               df_categories['Kasus Aktif'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
-                    ),
-            # Jumlah Kasus Aktif
-            html.P(f"{df_categories['Kasus Aktif'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            html.P(
-                'Baru :  ' + f"{df_categories['Kasus Aktif'].iloc[-1].sum() - df_categories['Kasus Aktif'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(((df_categories['Kasus Aktif'].iloc[-1].sum() - df_categories['Kasus Aktif'].iloc[-2].sum()) /
-                           df_categories['Kasus Aktif'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
-            )
-        ], className="card_container three columns",
-        ),
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container"),
+        ], className="col-md-3"),
 
         # Kasus Sembuh Harian
         html.Div([
-            html.H6(children='Total Sembuh ',
+            html.Div([
+                html.H6(children='Total Sembuh ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Sembuh
+                html.P(f"{df_categories['Sembuh'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                # Statistik
+                html.P(
+                    'Baru :  ' + f"{df_categories['Sembuh'].iloc[-1].sum() - df_categories['Sembuh'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(((df_categories['Sembuh'].iloc[-1].sum() - df_categories['Sembuh'].iloc[-2].sum()) /
+                               df_categories['Sembuh'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
-                    ),
-            # Jumlah Sembuh
-            html.P(f"{df_categories['Sembuh'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            # Statistik
-            html.P(
-                'Baru :  ' + f"{df_categories['Sembuh'].iloc[-1].sum() - df_categories['Sembuh'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(((df_categories['Sembuh'].iloc[-1].sum() - df_categories['Sembuh'].iloc[-2].sum()) /
-                           df_categories['Sembuh'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
-            )
-        ], className="card_container three columns",
-        ),
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container",
+            ),
+        ], className="col-md-3"),
 
         # Kasus Meninggal Dunia
         html.Div([
-            html.H6(children='Total Meninggal Dunia ',
+            html.Div([
+                html.H6(children='Total Meninggal Dunia ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Meninggal Dunia
+                html.P(f"{df_categories['Meninggal Dunia'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                # Statistik
+                html.P(
+                    'Baru :  ' + f"{df_categories['Meninggal Dunia'].iloc[-1].sum() - df_categories['Meninggal Dunia'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(((df_categories['Meninggal Dunia'].iloc[-1].sum() -
+                                df_categories['Meninggal Dunia'].iloc[
+                                    -2].sum()) /
+                               df_categories['Meninggal Dunia'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
-                    ),
-            # Jumlah Meninggal Dunia
-            html.P(f"{df_categories['Meninggal Dunia'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            # Statistik
-            html.P(
-                'Baru :  ' + f"{df_categories['Meninggal Dunia'].iloc[-1].sum() - df_categories['Meninggal Dunia'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(((df_categories['Meninggal Dunia'].iloc[-1].sum() -
-                            df_categories['Meninggal Dunia'].iloc[
-                                -2].sum()) /
-                           df_categories['Meninggal Dunia'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container",
             )
-        ], className="card_container three columns",
-        ),
-    ], className="row flex-display"),
+        ], className="col-md-3"),
+    ], className="row"),
 
     # Second ROW Card
     html.Div([
         # Kasus Meninggal Dunia Harian
         html.Div([
-            html.H6(children='Total Meninggal Dunia Harian ',
+            html.Div([
+                html.H6(children='Total Meninggal Dunia Harian ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Meninggal Dunia Harian
+                html.P(f"{df_categories['Meninggal Dunia Harian'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                # Statistik
+                html.P(
+                    'Baru :  ' + f"{df_categories['Meninggal Dunia Harian'].iloc[-1].sum() - df_categories['Meninggal Dunia Harian'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(((df_categories['Meninggal Dunia Harian'].iloc[-1].sum() -
+                                df_categories['Meninggal Dunia Harian'].iloc[
+                                    -2].sum()) /
+                               df_categories['Meninggal Dunia Harian'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
-                    ),
-            # Jumlah Meninggal Dunia Harian
-            html.P(f"{df_categories['Meninggal Dunia Harian'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            # Statistik
-            html.P(
-                'Baru :  ' + f"{df_categories['Meninggal Dunia Harian'].iloc[-1].sum() - df_categories['Meninggal Dunia Harian'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(((df_categories['Meninggal Dunia Harian'].iloc[-1].sum() -
-                            df_categories['Meninggal Dunia Harian'].iloc[
-                                -2].sum()) /
-                           df_categories['Meninggal Dunia Harian'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
-            )
-        ], className="card_container three columns",
-        ),
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container",
+            ), ], className="col-md-3"),
 
         # Kasus Sembuh Harian
         html.Div([
-            html.H6(children='Total Sembuh Harian ',
+            html.Div([
+                html.H6(children='Total Sembuh Harian ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Sembuh Harian
+                html.P(f"{df_categories['Sembuh Harian'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                # Statistik
+                html.P(
+                    'Baru :  ' + f"{df_categories['Sembuh Harian'].iloc[-1].sum() - df_categories['Sembuh Harian'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(((df_categories['Sembuh Harian'].iloc[-1].sum() - df_categories['Sembuh Harian'].iloc[
+                            -2].sum()) /
+                               df_categories['Sembuh Harian'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
-                    ),
-            # Jumlah Sembuh Harian
-            html.P(f"{df_categories['Sembuh Harian'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            # Statistik
-            html.P(
-                'Baru :  ' + f"{df_categories['Sembuh Harian'].iloc[-1].sum() - df_categories['Sembuh Harian'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(((df_categories['Sembuh Harian'].iloc[-1].sum() - df_categories['Sembuh Harian'].iloc[
-                        -2].sum()) /
-                           df_categories['Sembuh Harian'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
-            )
-        ], className="card_container three columns",
-        ),
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container",
+            ), ], className="col-md-3"),
 
         # Kasus Kasus Harian
         html.Div([
-            html.H6(children='Total Kasus Harian ',
+            html.Div([
+                html.H6(children='Total Kasus Harian ',
+                        style={
+                            'textAlign': 'center',
+                            'color': 'white'}
+                        ),
+                # Jumlah Kasus Harian
+                html.P(f"{df_categories['Kasus Harian'].iloc[-1].sum()}",
+                       style={
+                           'textAlign': 'center',
+                           'color': 'orange',
+                           'fontSize': 40}
+                       ),
+
+                # Statistik
+                html.P(
+                    'Baru :  ' + f"{df_categories['Kasus Harian'].iloc[-1].sum() - df_categories['Kasus Harian'].iloc[-2].sum()} "
+                    + ' (' + str(
+                        round(
+                            ((df_categories['Kasus Harian'].iloc[-1].sum() - df_categories['Kasus Harian'].iloc[
+                                -2].sum()) /
+                             df_categories['Kasus Harian'].iloc[-1].sum()) * 100, 2)) + '%)',
                     style={
                         'textAlign': 'center',
-                        'color': 'white'}
+                        'color': '#e55467',
+                        'fontSize': 15,
+                        'margin-top': '-18px'}
+                )
+            ], className="card_container",
+            ), ], className="col-md-3"),
+
+        html.Div([
+            html.Div(
+                [
+                    html.Div([
+                        dbc.Button("Lihat Zona Clustering", id="zona_cluster", className="btn btn-warning"),
+                    ], className="container p-2"),
+                    html.Div([
+                        dbc.Button("Lihat Statistik Keseluruhan Provinsi", id="plot-multi-line-provinsi",
+                                   className="btn btn-info"),
+                    ], className="container p-2"),
+
+                    dbc.Modal(
+                        [
+                            dbc.ModalHeader("Zona Clustering"),
+                            dbc.ModalBody([
+                                html.Div([
+                                    html.H6(children='Zona Cluster Berdasarkan Rate Sembuh Harian & Meninggal Harian',
+                                            style={
+                                                'textAlign': 'center'}
+                                            ),
+                                    html.Img(
+                                        src="#",
+                                        id='plot-k-means-daily',
+                                        style={
+                                            "height": "600px",
+                                            "width": "auto",
+                                            "margin-bottom": "25px",
+                                        },
+                                        className="img",
+                                    ),
+                                ], className="container text-center",
+                                ),
+                                html.Div([
+                                    html.H6(
+                                        children='Zona Cluster Berdasarkan Rata-Rata Kasus Aktif Mingguan & Rata-Rata Penambahan Kasus per Kapita Mingguan',
+                                        style={
+                                            'textAlign': 'center'}
+                                    ),
+                                    html.Img(
+                                        src="#",
+                                        id='plot-k-means-weekly',
+                                        style={
+                                            "height": "600px",
+                                            "width": "auto",
+                                            "margin-bottom": "25px",
+                                        },
+                                        className="img",
+                                    ),
+                                ], className="container text-center",
+                                ),
+
+                            ]),
+                            dbc.ModalFooter(
+                                dbc.Button("Close", id="close", className="ml-auto")
+                            ),
+                        ],
+                        id="zona_cluster_modal",
+                        size="lg"
                     ),
-            # Jumlah Kasus Harian
-            html.P(f"{df_categories['Kasus Harian'].iloc[-1].sum()}",
-                   style={
-                       'textAlign': 'center',
-                       'color': 'orange',
-                       'fontSize': 40}
-                   ),
-
-            # Statistik
-            html.P(
-                'Baru :  ' + f"{df_categories['Kasus Harian'].iloc[-1].sum() - df_categories['Kasus Harian'].iloc[-2].sum()} "
-                + ' (' + str(
-                    round(
-                        ((df_categories['Kasus Harian'].iloc[-1].sum() - df_categories['Kasus Harian'].iloc[-2].sum()) /
-                         df_categories['Kasus Harian'].iloc[-1].sum()) * 100, 2)) + '%)',
-                style={
-                    'textAlign': 'center',
-                    'color': '#e55467',
-                    'fontSize': 15,
-                    'margin-top': '-18px'}
-            )
-        ], className="card_container three columns",
-        )
-
-    ], className="row flex-display"),
+                ], className="card_container text-center"
+            ), ], className="col-md-3"),
+    ], className="row flex-display pt-4"),
 
     # Third Rowss Component
     html.Div([
 
         # Statistik Per Provinsi
+        html.Div([
         html.Div([
 
             html.P('Pilih Provinsi:', className='fix_label', style={'color': 'white'}),
@@ -313,29 +406,280 @@ app.layout = html.Div([
                       style={'margin-top': '20px'},
                       ),
 
-        ], className="create_container three columns", id="cross-filter-options"),
+        ], className="create_container", id="cross-filter-options"),
+        ], className="col-md-2"),
 
         # Plot Pie Chart
         html.Div([
+        html.Div([
             dcc.Graph(id='pie_chart',
                       config={'displayModeBar': 'hover'}),
-        ], className="create_container four columns"),
+        ], className="create_container"),
+        ], className="col-md-4"),
 
         # Plot Line Char
         html.Div([
+        html.Div([
             dcc.Graph(id="new_cases_line_chart")
-        ], className="create_container five columns"),
+        ], className="create_container"),
+        ], className="col-md-6"),
 
     ], className="row flex-display"),
 
     # MAPS
+
     html.Div([
         html.Div([
-            dcc.Graph(id="map")], className="create_container1 twelve columns"),
+            dcc.Graph(id="map")], className="create_container1"),
+    ], className="container flex-display"),
+
+    # Static Plot First Row
+    html.Div([
+        html.Div([
+            html.H6(children='Kasus Aktif',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-kasus-aktif',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Harian',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-kasus-harian',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Meninggal Dunia',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-kasus-meninggal',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
     ], className="row flex-display"),
+
+    # Static Plot Second Row
+    html.Div([
+        html.Div([
+            html.H6(children='Kasus Meninggal Dunia Harian',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-kasus-meninggal-harian',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Sembuh Harian',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-sembuh-harian',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Sembuh',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-sembuh',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+    ], className="row flex-display"),
+
+    # Static Plot Third Row
+    html.Div([
+        html.Div([
+            html.H6(children='Total Kasus',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-total-case',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Sembuh Harian Rata-Rata Bulanan',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-sembuh-harian-rata-rata',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Harian Rata-Rata Bulanan',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-kasus-harian-rata-rata',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+    ], className="row flex-display"),
+
+    # Static Plot Fourth Row
+    html.Div([
+        html.Div([
+            html.H6(children='Kasus Meninggal Dunia Harian Rata-Rata Bulanan',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-meninggal-dunia-rata-rata',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Meninggal Dunia Harian Rata-Rata Hari',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-meninggal-dunia-rata-rata-weekday',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+        html.Div([
+            html.H6(children='Kasus Sembuh Harian Rata-Rata Hari',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-sembuh-harian-rata-rata-weekday',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+    ], className="row flex-display"),
+
+    # Static Plot Fourth Row
+    html.Div([
+        html.Div([
+            html.H6(children='Kasus Harian Rata-Rata Hari',
+                    style={
+                        'textAlign': 'center',
+                        'color': 'white'}
+                    ),
+            html.Img(
+                src="#",
+                id='plot-kasus-harian-rata-rata-weekday',
+                style={
+                    "height": "325px",
+                    "width": "auto",
+                    "margin-bottom": "25px",
+                },
+            ),
+        ], className="card_container_4 four columns",
+        ),
+
+    ], className="row flex-display")
 
 ], id="mainContainer",
     style={"display": "flex", "flex-direction": "column"})
+
+
+# -- START LAYOUT
 
 
 # -- END Layout
@@ -684,16 +1028,15 @@ def update_graph(province):
 def update_graph(province):
     # covid_data_3 = covid_data.groupby(['Lat', 'Long', 'Country/Region'])[['confirmed', 'death', 'recovered', 'active']].max().reset_index()
     # covid_data_4 = covid_data_3[covid_data_3['Country/Region'] == w_countries]
-    #other_covid19_data = get_covid_19_data()
-    #print(other_covid19_data)
-    df_province_geo_location = pd.read_json("../data/geo_location_provinces.json")
-    df_province_geo_location['province'] = df_province_geo_location['name'].apply(lambda name: province_name_to_abr(name))
-    #print(df_province_geo_location.head(5))
+    # other_covid19_data = get_covid_19_data()
+    # print(other_covid19_data)
+    df_province_geo_location = pd.read_json(f"{DATA_PATH}/geo_location_provinces.json")
+    df_province_geo_location['province'] = df_province_geo_location['name'].apply(
+        lambda name: province_name_to_abr(name))
+    # print(df_province_geo_location.head(5))
     df_province_geo_location = df_province_geo_location.set_index('province')
 
-    #print(df_province_geo_location.index("Aceh"))
-
-
+    # print(df_province_geo_location.index("Aceh"))
 
     latitude = df_province_geo_location['latitude'][df_province_geo_location.index == province]
     longitude = df_province_geo_location['longitude'][df_province_geo_location.index == province]
@@ -750,8 +1093,130 @@ def update_graph(province):
 
     }
 
-
     return result
+
+
+# PLOT KASUS AKTIF
+@app.callback(Output(component_id='plot-kasus-aktif', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_aktif(province):
+    return f"{STORAGE_URL}/images/Kasus%20Aktif_{province}.png?raw=true"
+
+
+# PLOT KASUS harian
+@app.callback(Output(component_id='plot-kasus-harian', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_harian(province):
+    return f"{STORAGE_URL}/images/Kasus%20Harian_{province}.png?raw=true"
+
+
+# PLOT KASUS harian rata-rata
+@app.callback(Output(component_id='plot-kasus-harian-rata-rata', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_harian_rata_rata(province):
+    return f"{STORAGE_URL}/images/Kasus%20Harian%20Rata-Rata%20di%20{province}.png?raw=true"
+
+
+# PLOT KASUS meninggal
+@app.callback(Output(component_id='plot-kasus-meninggal', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_meninggal(province):
+    return f"{STORAGE_URL}/images/Meninggal%20Dunia_{province}.png?raw=true"
+
+
+# PLOT KASUS meninggal harian
+@app.callback(Output(component_id='plot-kasus-meninggal-harian', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_meninggal_harian(province):
+    return f"{STORAGE_URL}/images/Meninggal%20Dunia%20Harian_{province}.png?raw=true"
+
+
+# PLOT TOTAL CASE
+@app.callback(Output(component_id='plot-total-case', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_total_case(province):
+    return f"{STORAGE_URL}/images/Total%20Case_{province}.png?raw=true"
+
+
+# PLOT KASUS sembuh
+@app.callback(Output(component_id='plot-sembuh', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh(province):
+    return f"{STORAGE_URL}/images/Sembuh_{province}.png?raw=true"
+
+
+# PLOT KASUS sembuh harian
+@app.callback(Output(component_id='plot-sembuh-harian', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh_harian(province):
+    return f"{STORAGE_URL}/images/Sembuh%20Harian_{province}.png?raw=true"
+
+
+# PLOT KASUS sembuh rata-rata harian
+@app.callback(Output(component_id='plot-sembuh-harian-rata-rata', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh_harian_rata_rata(province):
+    return f"{STORAGE_URL}/images/Sembuh%20Harian%20Rata-Rata%20di%20{province}.png?raw=true"
+
+
+# PLOT KASUS meninggal dunia rata-rata
+@app.callback(Output(component_id='plot-meninggal-dunia-rata-rata', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh_harian_rata_rata(province):
+    return f"{STORAGE_URL}/images/Meninggal%20Dunia%20Harian%20Rata-Rata%20di%20{province}.png?raw=true"
+
+
+# PLOT KASUS meninggal dunia rata-rata dalam hari
+@app.callback(Output(component_id='plot-meninggal-dunia-rata-rata-weekday', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh_harian_rata_rata(province):
+    return f"{STORAGE_URL}/images/Meninggal%20Dunia%20Harian%20Rata-Rata%20dalam%20Hari%20di%20{province}.png?raw=true"
+
+
+# PLOT KASUS sembuh harian rata-rata dalam hari
+@app.callback(Output(component_id='plot-sembuh-harian-rata-rata-weekday', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh_harian_rata_rata(province):
+    return f"{STORAGE_URL}/images/Sembuh%20Harian%20Rata-Rata%20dalam%20Hari%20di%20{province}.png?raw=true"
+
+
+# PLOT KASUS sembuh harian rata-rata dalam hari
+@app.callback(Output(component_id='plot-kasus-harian-rata-rata-weekday', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kasus_sembuh_harian_rata_rata(province):
+    return f"{STORAGE_URL}/images/Kasus%20Harian%20Rata-Rata%20dalam%20Hari%20di%20{province}.png?raw=true"
+
+
+# PLOT k-means-daily
+@app.callback(Output(component_id='plot-k-means-daily', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kmeans_daily(province):
+    return f"{STORAGE_URL}/images/K-Means-Daily_Semua_Provinsi.png?raw=true"
+
+
+# PLOT k-means-weekly-no-norm
+# @app.callback(Output(component_id='plot-k-means-weekly-no-norm', component_property='src'),
+#              [Input('province', 'value')])
+# def update_plot_kmeans_weekly_no_norm(province):
+#    return f"{STORAGE_URL}/images/K-Means-Weekly_no_norm_Semua_Provinsi.png?raw=true"
+
+
+# PLOT k-means-weekly-no-norm
+@app.callback(Output(component_id='plot-k-means-weekly', component_property='src'),
+              [Input('province', 'value')])
+def update_plot_kmeans_weekly(province):
+    return f"{STORAGE_URL}/images/K-Means_Weekly_Semua_Provinsi.png?raw=true"
+
+
+@app.callback(
+    Output("zona_cluster_modal", "is_open"),
+    [Input("zona_cluster", "n_clicks"), Input("close", "n_clicks")],
+    [State("zona_cluster_modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 
 async def get_covid_19_data():
@@ -761,4 +1226,4 @@ async def get_covid_19_data():
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8060)
+    app.run_server(debug=True, host="0.0.0.0", port=8080)

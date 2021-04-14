@@ -5,3 +5,5 @@ seaborn
 schedule
 sklearn
 dash
+aiohttp
+dash-bootstrap-components
