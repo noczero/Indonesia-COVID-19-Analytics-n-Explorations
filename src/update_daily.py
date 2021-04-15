@@ -1,6 +1,6 @@
 import subprocess as cmd
-from covid19 import Covid19
-from kmeans_model import KMEANS_Covid
+from src.covid19 import Covid19
+from src.kmeans_model import KMEANS_Covid
 import schedule
 import time
 from datetime import datetime
