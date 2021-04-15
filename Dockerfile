@@ -11,6 +11,6 @@ COPY ./src /app/src
 COPY ./data /app/data
 
 ENV PYTHONPATH /app
-EXPOSE 8060
+EXPOSE 8080
 
 CMD python ui/app.py
