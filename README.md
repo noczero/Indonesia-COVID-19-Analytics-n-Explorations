@@ -5,19 +5,26 @@ Indonesia-COVID-19-Analytics-n-Explorations
 [![Updated Badge](https://badges.pufler.dev/created/noczero/Indonesia-COVID-19-Analytics-n-Explorations)](https://github.com/noczero/Indonesia-COVID-19-Analytics-n-Explorations)
 [![Visits Badge](https://badges.pufler.dev/updated/noczero/Indonesia-COVID-19-Analytics-n-Explorations)](https://github.com/noczero/Indonesia-COVID-19-Analytics-n-Explorations)
 
-This repository is for exploring covid-19 in Indonesia using data science approach. I can extract new active cases, still active cases, total confirmed cases, total cured cases, new cured cases, new dead cases, and total dead cases of all province in Indonesia. 
+This repository is for exploring COVID-19 in Indonesia using data science approach. I can extract new active cases, still active cases, total confirmed cases, total cured cases, new cured cases, new dead cases, and total dead cases of all province in Indonesia. 
 
 The data is from https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/edit#gid=2052139453 and managed by @kawalcovid19
 
+### Front-end Dashboard
+The COVID-19 Dashboard is available in covid19.zeroinside.in
 
 ### Project Structure
 
     .
     ├── data                    # Result of post processing in csv
-    ├── image                   # Images files that contain generated plots   
+    ├── images                  # Images files that contain generated plots   
     ├── notebooks               # Jupyter Notebooks file 
     ├── src                     # Python file for backend and apps, including utlilites
-    └── README.md
+    ├── ui                      # Front End Application
+    ├── docker-compose.yml 
+    ├── Dockerfile              
+    ├── main.py                 # just for update pipeline
+    ├── README.md              
+    └── requirements.txt
     
 ### To Do
 - [ ] Provide public API.   
