@@ -12,7 +12,7 @@ from src.covid19 import Covid19
 from src.utils import load_data_postprocessing, province_name_to_abr
 
 # MODE
-RETRIEVE_MODE = False
+RETRIEVE_MODE = True
 
 # PATH
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # This is your Project Root
