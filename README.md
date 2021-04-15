@@ -30,7 +30,6 @@ The COVID-19 Dashboard is available in https://covid19.zeroinside.in
 - [ ] Provide public API.   
   - [ ] Use fastAPI directly.
   - [ ] Use InfluxDB to store timeseries data, for backend using Laravel OAuth with token.
-- [ ] Build front-end app using Dash.
 - [ ] ... 
 
 ### Completed ✓
@@ -42,6 +41,7 @@ The COVID-19 Dashboard is available in https://covid19.zeroinside.in
 - [x] Generate aggregation plot so we get insight for monthly and for weekday on daily cases.
 - [x] Generate CSV file for post processing result
 - [x] Build k-Means model for clustering zone.
+- [x] Build front-end app using Dash.
 
 ### How to Contribute
 You can contribute to this repository, feel free to do pull request. I will review your PR.
