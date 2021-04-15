@@ -9,9 +9,8 @@ from matplotlib.dates import DateFormatter
 from pandas.plotting import register_matplotlib_converters
 from typing import Tuple, Dict
 import os
-from pathlib import Path
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # This is your Project Root
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # This is your Project Root
 DATA_PATH = os.path.join(ROOT_DIR, 'data')
 IMAGES_PATH = os.path.join(ROOT_DIR, 'images')
 
@@ -153,7 +152,7 @@ def save_plot(df_categories: dict):
 
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig('{}/{}_{}.png'.format(IMAGES_PATH,category, province), dpi=100)
+            plt.savefig('{}/{}_{}.png'.format(IMAGES_PATH, category, province), dpi=100)
             plt.close()
 
         print("Generating {} plot successfully.".format(category))
@@ -199,7 +198,7 @@ def save_plot_all_province(df_categories: dict):
             ax.xaxis.set_major_formatter(date_form)
 
             plt.subplots_adjust()
-            plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH,category), dpi=100, bbox_inches='tight')
+            plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH, category), dpi=100, bbox_inches='tight')
             plt.close()
         else:
             # bar
@@ -232,7 +231,7 @@ def save_plot_all_province(df_categories: dict):
             ax.xaxis.set_major_formatter(date_form)
 
             plt.subplots_adjust()
-            plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH,category), dpi=100, bbox_inches='tight')
+            plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH, category), dpi=100, bbox_inches='tight')
             plt.close()
 
         print("Generating join {} plot successfully.".format(category))
@@ -250,7 +249,7 @@ def save_plot_monthly(df_categories: dict):
                                               color='tab:red').set(xlabel='Waktu', ylabel='Orang')
                 ax.set_xticklabels(map(line_format, df_monthly_avg[province].index))
                 plt.tight_layout()
-                ax.figure.savefig('{}/{} Rata-Rata di {}'.format(IMAGES_PATH,category, province), dpi=100)
+                ax.figure.savefig('{}/{} Rata-Rata di {}'.format(IMAGES_PATH, category, province), dpi=100)
                 plt.close()
 
             print("Generating {} plot in month successfully.".format(category))
@@ -272,7 +271,7 @@ def save_plot_weekday(df_categories: dict):
                                              color='tab:red').set(xlabel='Waktu', ylabel='Orang')
                 ax.set_xticklabels(days)
                 plt.tight_layout()
-                ax.figure.savefig('{}/{} Rata-Rata dalam Hari di {}'.format(IMAGES_PATH,category, province), dpi=100)
+                ax.figure.savefig('{}/{} Rata-Rata dalam Hari di {}'.format(IMAGES_PATH, category, province), dpi=100)
                 plt.close()
 
             print("Generating {} plot in weekday successfully.".format(category))
@@ -280,7 +279,7 @@ def save_plot_weekday(df_categories: dict):
 
 def save_cases_to_csv(df_categories: dict):
     for category, df_category in df_categories.items():
-        filename = "{}/{}_post_processing.csv".format(DATA_PATH,category)
+        filename = "{}/{}_post_processing.csv".format(DATA_PATH, category)
         df_category.to_csv(filename)
         print("Generating for {} CSV file successfully".format(category))
 
@@ -321,7 +320,6 @@ def province_name_to_abr(province_name: str) -> str:
         'KEP. BANGKA BELITUNG': 'Babel',
         'SUMATERA BARAT': 'Sumbar',
         'SUMATERA SELATAN': 'Sumsel',
-        'KEP. BANGKA BELITUNG': 'Babel',
         'KEP. RIAU': 'Kep Riau',
         'DKI JAKARTA': 'Jakarta',
         'JAWA BARAT': 'Jabar',
@@ -362,13 +360,11 @@ def load_data_postprocessing() -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.Da
         'Total Case': 'Total Case_post_processing.csv'
     }
 
-
-
     df_categories = {}
     df_date_time = {}
     for category in files_categories:
         # get the value
-        csv_file_name = "{}/{}".format(DATA_PATH,files_categories[category])
+        csv_file_name = "{}/{}".format(DATA_PATH, files_categories[category])
 
         # load data
         df_categories[category] = pd.read_csv(csv_file_name)
@@ -425,9 +421,13 @@ def process_weekly_features(df_categories: [dict, pd.DataFrame], norm=True) -> p
 
     if norm:
         # df_features_norm = ( df_new_features[['weekly_active_average','weekly_confirmed_capita']] - df_new_features[['weekly_active_average','weekly_confirmed_capita']].min() ) / ( df_new_features[['weekly_active_average','weekly_confirmed_capita']].max() - df_new_features[['weekly_active_average','weekly_confirmed_capita']].min() )
-        #df_features_norm = (df_new_features - df_new_features.min()) / (df_new_features.max() - df_new_features.min())
-        df_new_features['weekly_active_average'] = (df_new_features['weekly_active_average'] - df_new_features['weekly_active_average'].min()) / (df_new_features['weekly_active_average'].max() - df_new_features['weekly_active_average'].min())
-        df_new_features['weekly_confirmed_capita'] = (df_new_features['weekly_confirmed_capita'] - df_new_features['weekly_confirmed_capita'].min()) / (df_new_features['weekly_confirmed_capita'].max() - df_new_features['weekly_confirmed_capita'].min())
+        # df_features_norm = (df_new_features - df_new_features.min()) / (df_new_features.max() - df_new_features.min())
+        df_new_features['weekly_active_average'] = (df_new_features['weekly_active_average'] - df_new_features[
+            'weekly_active_average'].min()) / (df_new_features['weekly_active_average'].max() - df_new_features[
+            'weekly_active_average'].min())
+        df_new_features['weekly_confirmed_capita'] = (df_new_features['weekly_confirmed_capita'] - df_new_features[
+            'weekly_confirmed_capita'].min()) / (df_new_features['weekly_confirmed_capita'].max() - df_new_features[
+            'weekly_confirmed_capita'].min())
 
         # df_features_norm
         return df_new_features
@@ -459,5 +459,5 @@ def generate_clustering_plot(y_predicts: list, df_features_x: pd.DataFrame, df_f
     plt.xlabel(plot_properties['x_label'])
     plt.ylabel(plot_properties['y_label'])
     plt.subplots_adjust()
-    plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH,plot_properties['name']), dpi=100, bbox_inches='tight')
+    plt.savefig('{}/{}_Semua_Provinsi.png'.format(IMAGES_PATH, plot_properties['name']), dpi=100, bbox_inches='tight')
     plt.close()
