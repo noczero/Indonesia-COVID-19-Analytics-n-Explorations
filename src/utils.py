@@ -272,7 +272,7 @@ def save_plot_weekday(df_categories: dict):
                                              color='tab:red').set(xlabel='Waktu', ylabel='Orang')
                 ax.set_xticklabels(days)
                 plt.tight_layout()
-                ax.figure.savefig('{}/{} Rata-Rata dalam Hari di {}'.IMAGES_PATH,format(category, province), dpi=100)
+                ax.figure.savefig('{}/{} Rata-Rata dalam Hari di {}'.format(IMAGES_PATH,category, province), dpi=100)
                 plt.close()
 
             print("Generating {} plot in weekday successfully.".format(category))
