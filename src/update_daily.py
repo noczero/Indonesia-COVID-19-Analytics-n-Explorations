@@ -5,13 +5,19 @@ import schedule
 import time
 from datetime import datetime
 
+FILE_EXTENSION = 'csv'  # export format
+SHEET_GID = '2052139453'  # get from browser url when sheet clicked
+DATA_URL = 'https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/export?format={}&gid={}'.format(
+    FILE_EXTENSION, SHEET_GID)
+UPDATE_TIME = '19:30'
+
 
 def run_automation():
     # invoke pull for recent files on master
     do_git_pull_cmd()
 
     # generate plot
-    indo_covid19 = Covid19(data_url)
+    indo_covid19 = Covid19(DATA_URL)
     indo_covid19.generate_plot()
     indo_covid19.generate_aggregation_plot()
     indo_covid19.generate_monthly_plot()
@@ -56,17 +62,17 @@ def do_git_push_cmd():
         print("Something wrong...")
 
 
-if __name__ == '__main__':
+def main():
     print("Start Scheduling...")
-    format = 'csv'  # export format
-    sheet_gid = '2052139453'  # get from browser url when sheet clicked
-    data_url = 'https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/export?format={}&gid={}'.format(
-        format, sheet_gid)
-    update_time = "19:30"
-    schedule.every().day.at(update_time).do(run_automation)
+
+    schedule.every().day.at(UPDATE_TIME).do(run_automation)
 
     run_automation()
 
     while True:
         schedule.run_pending()
         time.sleep(1)
+
+
+if __name__ == '__main__':
+    main()
