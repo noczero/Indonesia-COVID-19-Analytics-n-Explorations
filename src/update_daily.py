@@ -9,7 +9,7 @@ FILE_EXTENSION = 'csv'  # export format
 SHEET_GID = '2052139453'  # get from browser url when sheet clicked
 DATA_URL = 'https://docs.google.com/spreadsheets/d/1ma1T9hWbec1pXlwZ89WakRk-OfVUQZsOCFl4FwZxzVw/export?format={}&gid={}'.format(
     FILE_EXTENSION, SHEET_GID)
-UPDATE_TIME = '19:30'
+UPDATE_TIME = '20:30'
 
 
 def run_automation():
