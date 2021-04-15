@@ -153,7 +153,7 @@ def save_plot(df_categories: dict):
 
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig('{}/{}_{}.png'.format(category,IMAGES_PATH, province), dpi=100)
+            plt.savefig('{}/{}_{}.png'.format(IMAGES_PATH,category, province), dpi=100)
             plt.close()
 
         print("Generating {} plot successfully.".format(category))
