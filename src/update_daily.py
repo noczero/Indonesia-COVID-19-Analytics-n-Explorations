@@ -47,8 +47,8 @@ def do_git_pull_cmd():
 def do_git_push_cmd():
     try:
         print("Add generated files to staging area.")
-        cmd.run("git add ../images", check=True, shell=True)
-        cmd.run("git add ../data", check=True, shell=True)
+        cmd.run("git add images", check=True, shell=True)
+        cmd.run("git add data", check=True, shell=True)
 
         print("Commit...")
         dt_now = datetime.now()
