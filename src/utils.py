@@ -33,8 +33,8 @@ def preprocessing(df_raw: pd.DataFrame) -> dict:
     df_clean = df_raw.iloc[:, :-2]  # remove 2 last columns
 
     # We dont care about meninggal Luar Jakarta categories and others remaining, so we find its index
-    index_no_need = df_clean[df_clean['Bali'].str.match('Luar Jakarta', na=False)].index.values[0]
-    df_clean = df_clean.iloc[:index_no_need, :]
+    # index_no_need = df_clean[df_clean['Bali'].str.match('Luar Jakarta', na=False)].index.values[0]
+    # df_clean = df_clean.iloc[:index_no_need, :]
 
     # take rows that total kasus is not NaN
     df_clean = df_clean[df_clean['Total Kasus'].notna()]
@@ -60,7 +60,7 @@ def preprocessing(df_raw: pd.DataFrame) -> dict:
             df_categories[categories[i]] = df_clean.iloc[idx_categories_list[i] + 1:idx_categories_list[i + 1], :]
         else:
             # as it last, last rows is index_no_need
-            df_categories[categories[i]] = df_clean.iloc[idx_categories_list[i] + 1:index_no_need, :]
+            df_categories[categories[i]] = df_clean.iloc[idx_categories_list[i] + 1::, :]
 
     # added df_total_kasus to df_categories
     df_categories['Total Case'] = df_total_cases
