@@ -38,7 +38,7 @@ app.layout = html.Div([
 
         html.Div([
             html.H6('Terakhir Diperbarui : ', style={'color': 'white'}),
-            html.H6(str(df_times['Total Case'].iloc[-1]) + '  19:30 (GMT)',
+            html.H6(str(df_times['Total Case'].iloc[-1]) + '  20:30 (GMT)',
                     style={'color': 'white'})
 
         ], className="col-md-4", id='title1'),
