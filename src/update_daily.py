@@ -73,6 +73,26 @@ def main():
         schedule.run_pending()
         time.sleep(1)
 
+def run_single():
+    # generate plot
+    indo_covid19 = Covid19(DATA_URL)
+    indo_covid19.generate_plot()
+    indo_covid19.generate_aggregation_plot()
+    indo_covid19.generate_monthly_plot()
+    indo_covid19.generate_weekday_plot()
+
+    # generate csv
+    indo_covid19.generate_csv()
+
+    # k-Means
+    kmeans_covid = KMEANS_Covid()
+    print("Daily Clustering")
+    kmeans_covid.model_daily_cured_death_rate(n_clusters=5)
+    print("Weekly Clustering")
+    kmeans_covid.model_weekly_active_newactivecapita_average(n_clusters=3)
+    print("Weekly Clustering No-Norm")
+    kmeans_covid.model_weekly_active_newactive_average_no_norm(n_clusters=2)
 
 if __name__ == '__main__':
-    main()
+    #main()
+    run_single()

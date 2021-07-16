@@ -62,8 +62,11 @@ class KMEANS_Covid:
         features = process_weekly_features(self.df_categories, norm=False)
 
         # predicts class
+        # y_predicts = KMeans(n_clusters=n_clusters).fit_predict(
+        #    features[['weekly_active_average', 'weekly_confirmed_average']].astype('float16'))
+
         y_predicts = KMeans(n_clusters=n_clusters).fit_predict(
-            features[['weekly_active_average', 'weekly_confirmed_average']].astype('float16'))
+            features[['weekly_active_average', 'weekly_confirmed_average']])
 
         # generate plot
         plot_properties = {
@@ -84,8 +87,8 @@ class KMEANS_Covid:
 
 if __name__ == '__main__':
     kmeans_covid = KMEANS_Covid()
-    #print("Daily Clustering")
-    #kmeans_covid.model_daily_cured_death_rate(n_clusters=5)
+    print("Daily Clustering")
+    kmeans_covid.model_daily_cured_death_rate(n_clusters=5)
     print("Weekly Clustering")
     kmeans_covid.model_weekly_active_newactivecapita_average(n_clusters=3)
     print("Weekly Clustering No-Norm")
