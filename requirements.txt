@@ -7,3 +7,4 @@ sklearn
 dash
 aiohttp
 dash-bootstrap-components
+openpyxl
